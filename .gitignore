@@ -15,3 +15,7 @@ hs_err_pid*
 licenseheader.txt
 nb-configuration.xml
 target
+
+# Idea project files
+.idea
+*.iml
