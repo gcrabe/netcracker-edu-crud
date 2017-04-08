@@ -10,6 +10,8 @@ package com.netcracker.education.crudlib.database;
  * @author Ya
  */
 public class DatabaseUtils {
-    // TODO: parse settings.properties(root path)
-    
+    public static String getPath(){
+        // TODO: parse settings.properties(root path)
+        return "";
+    }
 }
