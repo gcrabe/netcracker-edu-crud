@@ -5,6 +5,7 @@
  */
 package com.netcracker.education.crudlib.database;
 
+import com.netcracker.education.crudlib.table.Table;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,5 +16,5 @@ import java.util.Map;
 public class Database {
     String name;
     String path;
-    //Map<String, Table> tables = new HashMap<>(); // tableName, table
+    Map<String, Table> tables = new HashMap<>(); // tableName, table
 }
