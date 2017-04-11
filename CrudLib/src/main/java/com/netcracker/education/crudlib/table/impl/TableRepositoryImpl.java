@@ -36,7 +36,7 @@ public class TableRepositoryImpl implements TableRepository{
     }
 
     @Override
-    public List<String> getAllNames() {
+    public List<String> getAllNames(String dbName) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
