@@ -16,5 +16,5 @@ public interface TableRepository {
     public void delete(String dbName, String tableName);
     public void update(String dbName, String tableName, String newTableName);
     public Table getByName(String dbName, String tableName);
-    public List<String> getAllNames();
+    public List<String> getAllNames(String dbName);
 }
