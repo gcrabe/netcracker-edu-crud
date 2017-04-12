@@ -10,10 +10,12 @@ import java.util.List;
  */
 public class Record {
     
-    List<String> fields;
+    List<String> fields = new ArrayList<>();
     
-    public Record() {
-        fields = new ArrayList<>();
+    public Record() {}
+    
+    public Record(List<String> fields) {
+	this.fields = fields;
     }
     
     public List<String> getFields() {

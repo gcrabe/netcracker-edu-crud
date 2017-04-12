@@ -11,11 +11,11 @@ public interface RecordDAO {
     
     public void create(String dbName, String tableName, Map<String, String> fields);
     
-    public void delete(String dbName, String tableName, String field, String value);
+    public void delete(String dbName, String tableName, Map<String, String> fields);
     
-    public void update(String dbName, String tableName, String field, String value);
+    public void update(String dbName, String tableName, Map<String, String> fields);
     
-    public List<String> getAll();
+    public List<String> getAll(String dbName, String tableName);
     
-    public Record getByField(String dbName, String tableName, String field, String value);
+    public Record getByFields(String dbName, String tableName, Map<String, String> fields);
 }

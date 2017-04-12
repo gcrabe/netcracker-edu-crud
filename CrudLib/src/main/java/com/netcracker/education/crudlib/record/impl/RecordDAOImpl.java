@@ -18,22 +18,22 @@ public class RecordDAOImpl implements RecordDAO {
     }
 
     @Override
-    public void delete(String dbName, String tableName, String field, String value) {
+    public void delete(String dbName, String tableName, Map<String, String> fields) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void update(String dbName, String tableName, String field, String value) {
+    public void update(String dbName, String tableName, Map<String, String> fields) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<String> getAll() {
+    public List<String> getAll(String dbName, String tableName) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Record getByField(String dbName, String tableName, String field, String value) {
+    public Record getByFields(String dbName, String tableName, Map<String, String> fields) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
