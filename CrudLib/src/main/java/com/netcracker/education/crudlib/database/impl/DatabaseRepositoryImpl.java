@@ -15,29 +15,36 @@ import java.util.List;
  */
 public class DatabaseRepositoryImpl implements DatabaseRepository{
 
+    //добавить мапу с именами баз и работать с ними в методах ниже
+    
     @Override
     public void create(String dbName) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
     public void delete(String dbName) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //ассоциировать директорию
     }
 
     @Override
     public void update(String dbName, String newDbName) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //допишу позже
     }
 
     @Override
     public Database getByName(String dbName) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
     public List<String> getAllNames() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
     
 }

@@ -17,4 +17,27 @@ public class Database {
     String name;
     String path;
     Map<String, Table> tables = new HashMap<>(); // tableName, table
+    
+    public Database(String name) {
+        this.name = name;
+        //обработать путь
+    }
+    
+    String getName(){
+        return name;
+    }
+    
+    void setName(String newName){
+        name = newName;
+    }
+    
+    String getPath(){
+        return path;
+    }
+    
+    void setPath(String newPath){
+        path = newPath;
+        //обработать путь
+    }
+   
 }
