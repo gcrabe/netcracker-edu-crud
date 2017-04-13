@@ -5,8 +5,12 @@
  */
 package com.netcracker.education.crudlib.table.impl;
 
+import com.netcracker.education.crudlib.record.impl.RecordDAOImpl;
 import com.netcracker.education.crudlib.table.Table;
 import com.netcracker.education.crudlib.table.TableRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
 /**
@@ -14,6 +18,8 @@ import java.util.List;
  * @author --
  */
 public class TableRepositoryImpl implements TableRepository{
+
+    public static final Logger LOGGER = LoggerFactory.getLogger(TableRepositoryImpl.class.getName());
 
     @Override
     public void create(String dbName, String tableName, List<String> fieldNames) {
