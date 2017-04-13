@@ -7,44 +7,96 @@ package com.netcracker.education.crudlib.database.impl;
 
 import com.netcracker.education.crudlib.database.Database;
 import com.netcracker.education.crudlib.database.DatabaseRepository;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 
 /**
  *
  * @author Ya
  */
 public class DatabaseRepositoryImpl implements DatabaseRepository{
-
-    //добавить мапу с именами баз и работать с ними в методах ниже
     
     @Override
     public void create(String dbName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        FileInputStream fis;
+        Properties property = new Properties();
+        String dbRoot = null;
         
+        try {
+            fis = new FileInputStream("src/main/resources/config.properties");
+            property.load(fis);
+            dbRoot = property.getProperty("dbRoot");
+            
+            //если корень не указан, то создаем 
+            if(dbRoot.isEmpty()){
+                File folderOfProject = new File("dbRoot");
+                folderOfProject.createNewFile();
+                String newDbRoot = folderOfProject.getPath();
+                property.setProperty(dbRoot, newDbRoot);
+            }
+        } catch (IOException e) {
+            System.err.println("ОШИБКА: Файл свойств отсуствует!");
+        }
+        
+        dbName = dbRoot + dbName;
+        File database = new File(dbName);
+        database.mkdirs();
+        //проверить корректность пути, если уже существует и прочее
     }
 
     @Override
     public void delete(String dbName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        //ассоциировать директорию
+        File database = new File(dbName);
+        database.delete();
+        //проверить корректность пути, наличие файла и прочее
     }
 
     @Override
     public void update(String dbName, String newDbName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        //допишу позже
+        File database = new File(dbName); //нужен dbRoot?
+        database.renameTo(new File(newDbName));//нужен dbRoot?
+        //проверить корректность имени, существование файла и прочее
     }
 
     @Override
     public Database getByName(String dbName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        
+        Database database = new Database(dbName);
+        return database;
     }
 
     @Override
     public List<String> getAllNames() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        FileInputStream fis;
+        Properties property = new Properties();
+        String dbRoot = null;
         
+        try {
+            fis = new FileInputStream("src/main/resources/config.properties");
+            property.load(fis);
+            dbRoot = property.getProperty("dbRoot");
+            
+            //если корень не указан, то создаем 
+            if(dbRoot.isEmpty()){
+                File folderOfProject = new File("dbRoot");
+                folderOfProject.createNewFile();
+                String newDbRoot = folderOfProject.getPath();
+                property.setProperty(dbRoot, newDbRoot);
+            }
+        } catch (IOException e) {
+            System.err.println("ОШИБКА: Файл свойств отсуствует!");
+        }
+        
+        File root = new File(dbRoot);
+        String[] arrayNames = root.list();
+        List<String> names = new ArrayList<>();
+        names.addAll(Arrays.asList(arrayNames));//заполняем список имен
+        
+        return names;
     }
     
 }

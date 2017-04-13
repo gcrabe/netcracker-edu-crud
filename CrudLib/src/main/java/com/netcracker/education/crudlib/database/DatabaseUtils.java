@@ -9,6 +9,7 @@ package com.netcracker.education.crudlib.database;
  *
  * @author Ya
  */
+//нужен ли, если есть getPath для Database
 public class DatabaseUtils {
     public static String getPath(){
         // TODO: parse settings.properties(root path)
