@@ -18,46 +18,38 @@ import java.util.Properties;
  * @author Ya
  */
 public class Database {
-    String name;
-    String path;
-    //нужны сеттеры и геттеры для мапы?
-    Map<String, Table> tables = new HashMap<>(); // tableName, table
+    private String name;
+    private final String path;
+    //правильный уровень доступа?
+    private final Map<String, Table> tables = new HashMap<>(); // tableName, table
     
     public Database(String name) {
-        FileInputStream fis;
-        Properties property = new Properties();
-        String dbRoot = null;
-        
-        try {
-            fis = new FileInputStream("src/main/resources/config.properties");
-            property.load(fis);
-            dbRoot = property.getProperty("dbRoot");
-            
-            //если корень не указан, то создаем 
-            if(dbRoot.isEmpty()){
-                File folderOfProject = new File("dbRoot");
-                folderOfProject.createNewFile();
-                String newDbRoot = folderOfProject.getPath();
-                property.setProperty(dbRoot, newDbRoot);
-            }
-        } catch (IOException e) {
-            System.err.println("ОШИБКА: Файл свойств отсуствует!");
-        }
         this.name = name;
-        this.path = dbRoot + name;
+        this.path = DatabaseUtils.getPath() + name;
         //проверить корректность пути и имени
     }
     
-    String getName(){
+    public String getName(){
         return name;
     }
     
-    void setName(String newName){
+    public void setName(String newName){
         name = newName;
     }
     
-    String getPath(){
+    public String getPath(){
         return path;
     }
-   
+    
+    public void putTable(String tableName, Table table){
+        tables.put(tableName, table);
+    }
+    
+    public Table getTable(String tableName){
+        return tables.get(tableName);
+    }
+    
+    public void removeTable(String tableName){
+        tables.remove(tableName);
+    }
 }

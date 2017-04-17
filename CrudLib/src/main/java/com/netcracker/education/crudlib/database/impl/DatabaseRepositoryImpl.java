@@ -7,54 +7,57 @@ package com.netcracker.education.crudlib.database.impl;
 
 import com.netcracker.education.crudlib.database.Database;
 import com.netcracker.education.crudlib.database.DatabaseRepository;
+import com.netcracker.education.crudlib.database.DatabaseUtils;
+import com.netcracker.education.crudlib.table.Table;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 
 /**
  *
  * @author Ya
  */
 public class DatabaseRepositoryImpl implements DatabaseRepository{
-
+    
     private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseRepositoryImpl.class.getName());
     
-    @Override
-    public void create(String dbName) {
-        FileInputStream fis;
-        Properties property = new Properties();
-        String dbRoot = null;
-        
-        try {
-            fis = new FileInputStream("src/main/resources/config.properties");
-            property.load(fis);
-            dbRoot = property.getProperty("dbRoot");
-            
-            //если корень не указан, то создаем 
-            if(dbRoot.isEmpty()){
-                File folderOfProject = new File("dbRoot");
-                folderOfProject.createNewFile();
-                String newDbRoot = folderOfProject.getPath();
-                property.setProperty(dbRoot, newDbRoot);
+    //реализация паттерна Sinleton
+    private static volatile DatabaseRepositoryImpl instance;
+    private DatabaseRepositoryImpl(){} //запрещаем создание объекта извне
+    
+    public static DatabaseRepositoryImpl getInstance(){
+        DatabaseRepositoryImpl localInstance = instance;
+        if(localInstance == null){
+            synchronized(DatabaseRepositoryImpl.class){
+                localInstance = instance;
+                if(localInstance == null){
+                    localInstance = new DatabaseRepositoryImpl();
+                    instance = localInstance;
+                }
             }
-        } catch (IOException e) {
-//            System.err.println("ОШИБКА: Файл свойств отсуствует!");
-            LOGGER.error("Property file is not found.", Level.ERROR);
         }
-        
-        dbName = dbRoot + dbName;
+        return localInstance;
+    }
+    
+    //такая мапа должна быть?
+    private final Map<String, Table> tables = new HashMap<>();
+    
+    //описание основных методов
+    @Override
+    public void create(String dbName) {       
+        dbName = DatabaseUtils.getPath() + dbName;
         File database = new File(dbName);
         database.mkdirs();
         //проверить корректность пути, если уже существует и прочее
+        
         LOGGER.info("Database directory created.", Level.INFO);
     }
 
@@ -92,29 +95,8 @@ public class DatabaseRepositoryImpl implements DatabaseRepository{
     }
 
     @Override
-    public List<String> getAllNames() {
-        FileInputStream fis;
-        Properties property = new Properties();
-        String dbRoot = null;
-        
-        try {
-            fis = new FileInputStream("src/main/resources/config.properties");
-            property.load(fis);
-            dbRoot = property.getProperty("dbRoot");
-            
-            //если корень не указан, то создаем 
-            if(dbRoot.isEmpty()){
-                File folderOfProject = new File("dbRoot");
-                folderOfProject.createNewFile();
-                String newDbRoot = folderOfProject.getPath();
-                property.setProperty(dbRoot, newDbRoot);
-            }
-        } catch (IOException e) {
-//            System.err.println("ОШИБКА: Файл свойств отсуствует!");
-            LOGGER.error("Property file is not found.", Level.ERROR);
-        }
-        
-        File root = new File(dbRoot);
+    public List<String> getAllNames() {        
+        File root = new File(DatabaseUtils.getPath());
         String[] arrayNames = root.list();
         List<String> names = new ArrayList<>();
         names.addAll(Arrays.asList(arrayNames));//заполняем список имен
