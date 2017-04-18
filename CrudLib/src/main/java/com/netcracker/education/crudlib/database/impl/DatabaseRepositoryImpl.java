@@ -8,7 +8,6 @@ package com.netcracker.education.crudlib.database.impl;
 import com.netcracker.education.crudlib.database.Database;
 import com.netcracker.education.crudlib.database.DatabaseRepository;
 import com.netcracker.education.crudlib.database.DatabaseUtils;
-import com.netcracker.education.crudlib.table.Table;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +34,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository{
     
     public static DatabaseRepositoryImpl getInstance(){
         DatabaseRepositoryImpl localInstance = instance;
+        
         if(localInstance == null){
             localInstance = instance;
             if(localInstance == null){
@@ -42,21 +42,30 @@ public class DatabaseRepositoryImpl implements DatabaseRepository{
                 instance = localInstance;
             }
         }
+        
         return localInstance;
     }
     
-    //такая мапа должна быть?
-    private final Map<String, Table> tables = new HashMap<>();
+    private final Map<String, Database> bases = new HashMap<>();
     
     //описание основных методов
     @Override
-    public void create(String dbName) {       
-        dbName = DatabaseUtils.getPath() + dbName;
-        File database = new File(dbName);
-        database.mkdirs();
-        //проверить корректность пути, если уже существует и прочее
+    public boolean create(String dbName) {
+        if (!DatabaseUtils.nameValidation(dbName)) {
+            LOGGER.error("Incorrect database name", Level.ERROR);
+            return false;
+        }
+        
+        String fullPath = DatabaseUtils.getPath() + dbName + '/';
+        File databaseDirectory = new File(dbName);
+        databaseDirectory.mkdirs();
+        
+        Database tempDatabase = new Database(dbName);
+        bases.put(dbName, tempDatabase);
         
         LOGGER.info("Database directory created.", Level.INFO);
+        
+        return true;
     }
 
     @Override

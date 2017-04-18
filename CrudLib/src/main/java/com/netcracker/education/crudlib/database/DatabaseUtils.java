@@ -47,7 +47,7 @@ public class DatabaseUtils {
             File rootDirectory = new File(dbRoot);
             
             if (!rootDirectory.exists()) {
-                rootDirectory.createNewFile();
+                rootDirectory.mkdirs();
             }
         } catch (IOException e) {
             LOGGER.error("Property file is not found.", Level.ERROR);
@@ -62,5 +62,10 @@ public class DatabaseUtils {
         }
 
         return dbRoot;
+    }
+    
+    public static boolean nameValidation(String name) {
+        // TODO!
+        return true;
     }
 }
