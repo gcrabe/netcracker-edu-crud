@@ -30,18 +30,16 @@ public class DatabaseRepositoryImpl implements DatabaseRepository{
     private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseRepositoryImpl.class.getName());
     
     //реализация паттерна Sinleton
-    private static volatile DatabaseRepositoryImpl instance;
+    private static DatabaseRepositoryImpl instance;
     private DatabaseRepositoryImpl(){} //запрещаем создание объекта извне
     
     public static DatabaseRepositoryImpl getInstance(){
         DatabaseRepositoryImpl localInstance = instance;
         if(localInstance == null){
-            synchronized(DatabaseRepositoryImpl.class){
-                localInstance = instance;
-                if(localInstance == null){
-                    localInstance = new DatabaseRepositoryImpl();
-                    instance = localInstance;
-                }
+            localInstance = instance;
+            if(localInstance == null){
+                localInstance = new DatabaseRepositoryImpl();
+                instance = localInstance;
             }
         }
         return localInstance;
