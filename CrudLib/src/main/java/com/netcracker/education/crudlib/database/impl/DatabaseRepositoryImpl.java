@@ -111,6 +111,20 @@ public class DatabaseRepositoryImpl implements DatabaseRepository{
         
         return true;
     }
+    
+    public boolean update(Database database, Database newDatabase){
+        
+        boolean updateTemp = update(database.getName(), newDatabase.getName());
+        if(!updateTemp){
+            return false;
+        }
+        
+        StringBuilder msg = new StringBuilder();
+        msg.append("Database [").append(database.getName()).append("] successfully renamed to [").append(newDatabase.getName()).append("].");
+        LOGGER.info(msg.toString(), Level.INFO);
+        
+        return true;
+    }
 
     @Override
     public Database getByName(String dbName) {
