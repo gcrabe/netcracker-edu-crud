@@ -96,6 +96,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository{
             return false;
         }
         
+        //обновляем базу
         bases.replace(database.getName(), database);
         
         //StringBuilder msg = new StringBuilder();
@@ -117,7 +118,6 @@ public class DatabaseRepositoryImpl implements DatabaseRepository{
 
             return false;
         }
-        
         //проверка наличия объекта в мапе
         if(bases.containsKey(dbName)){
             return false;
