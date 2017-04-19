@@ -11,6 +11,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +67,46 @@ public class DatabaseUtils {
     }
     
     public static boolean nameValidation(String name) {
-        // TODO!
+        
+        Pattern pattern = Pattern.compile("(.+)?[><\\|\\?*/:\\\\\"](.+)?");
+        Matcher matcher = pattern.matcher(name);
+        
+        return !matcher.find();
+    }
+    
+    public static boolean createDatabaseRepository(String dbName){
+        
+        if(!DatabaseUtils.nameValidation(dbName)) {
+            LOGGER.error("Incorrect database name", Level.ERROR);
+            return false;
+        }
+        
+        String fullPath = DatabaseUtils.getPath() + dbName + '/';
+        File databaseDirectory = new File(fullPath);
+        boolean creatingTemp = databaseDirectory.mkdirs();
+        if(!creatingTemp){
+            LOGGER.error("Database can't be created.", Level.ERROR);
+            return false;
+        }
+        
+        return true;
+    }
+    
+    public static boolean deleteDatabaseRepository(String dbName){
+        
+        if (!DatabaseUtils.nameValidation(dbName)) {
+            LOGGER.error("Incorrect database name", Level.ERROR);
+            return false;
+        }
+        
+        String fullPath = DatabaseUtils.getPath() + dbName + '/';
+        File databaseDirectory = new File(fullPath);
+        boolean deletingTemp = databaseDirectory.delete();
+        if(deletingTemp == false){
+            LOGGER.error("Database can't be deleted.", Level.ERROR);
+            return false;
+        }
+        
         return true;
     }
 }

@@ -13,9 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +25,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository{
     
     private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseRepositoryImpl.class.getName());
     
-    //реализация паттерна Sinleton
+    //реализация паттерна Singleton
     private static DatabaseRepositoryImpl instance;
     private DatabaseRepositoryImpl(){} //запрещаем создание объекта извне
     
@@ -51,15 +48,14 @@ public class DatabaseRepositoryImpl implements DatabaseRepository{
     //описание основных методов
     @Override
     public boolean create(String dbName) {
-        if (!DatabaseUtils.nameValidation(dbName)) {
-            LOGGER.error("Incorrect database name", Level.ERROR);
+        
+        //создаем файл
+        boolean createDatabaseTemp = DatabaseUtils.createDatabaseRepository(dbName);
+        if(!createDatabaseTemp){
             return false;
         }
         
-        String fullPath = DatabaseUtils.getPath() + dbName + '/';
-        File databaseDirectory = new File(dbName);
-        databaseDirectory.mkdirs();
-        
+        //создаем элемент в мапе
         Database tempDatabase = new Database(dbName);
         bases.put(dbName, tempDatabase);
         
@@ -69,31 +65,58 @@ public class DatabaseRepositoryImpl implements DatabaseRepository{
     }
 
     @Override
-    public void delete(String dbName) {
-        File database = new File(dbName);
-        database.delete();
-        //проверить корректность пути, наличие файла и прочее
-
+    public boolean delete(String dbName) {
+        
+        //удаляем файл
+        boolean deleteDatabaseTemp = DatabaseUtils.deleteDatabaseRepository(dbName);
+        if(!deleteDatabaseTemp){
+            return false;
+        }
+        
+        //удфляем из мапы
+        Database tempDatabase = new Database(dbName);
+        bases.remove(dbName, tempDatabase);
+        
         StringBuilder msg = new StringBuilder();
         msg.append("Database [").append(dbName).append("] deleted successfully.");
         LOGGER.info(msg.toString(), Level.INFO);
+        
+        return true;
     }
 
     @Override
-    public void update(String dbName, String newDbName) {
-        File database = new File(dbName); //нужен dbRoot?
-        database.renameTo(new File(newDbName));//нужен dbRoot?
-        //проверить корректность имени, существование файла и прочее
-
+    public boolean update(String dbName, String newDbName) {
+        
+        //удаляем старый файл и загружаем новый
+        boolean updateTemp = DatabaseUtils.deleteDatabaseRepository(dbName);
+        if(!updateTemp){
+            return false;
+        }
+        
+        updateTemp = DatabaseUtils.createDatabaseRepository(newDbName);
+        if(!updateTemp){
+            return false;
+        }
+        
+        //удаляем из мапы и добавляем новую
+        Database tempDatabase = new Database(dbName);
+        bases.remove(dbName, tempDatabase);
+        
+        tempDatabase = new Database(newDbName);
+        bases.put(dbName, tempDatabase);
+        
         StringBuilder msg = new StringBuilder();
         msg.append("Database [").append(dbName).append("] successfully renamed to [").append(newDbName).append("].");
         LOGGER.info(msg.toString(), Level.INFO);
+        
+        return true;
     }
 
     @Override
     public Database getByName(String dbName) {
-        Database database = new Database(dbName);
-
+        
+        Database database = bases.get(dbName);
+        
         StringBuilder msg = new StringBuilder();
         msg.append("The user requested a database named [").append(dbName).append("].");
         LOGGER.info(msg.toString(), Level.INFO);
@@ -102,11 +125,9 @@ public class DatabaseRepositoryImpl implements DatabaseRepository{
     }
 
     @Override
-    public List<String> getAllNames() {        
-        File root = new File(DatabaseUtils.getPath());
-        String[] arrayNames = root.list();
-        List<String> names = new ArrayList<>();
-        names.addAll(Arrays.asList(arrayNames));//заполняем список имен
+    public List<String> getAllNames() {
+        
+        List<String> names = (List<String>) bases.keySet();
 
         StringBuilder msg = new StringBuilder();
         msg.append("The user requested all database names.");

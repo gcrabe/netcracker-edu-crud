@@ -13,8 +13,8 @@ import java.util.List;
  */
 public interface DatabaseRepository {
     public boolean create(String dbName);
-    public void delete(String dbName);
-    public void update(String dbName, String newDbName);
+    public boolean delete(String dbName);
+    public boolean update(String dbName, String newDbName);
     public Database getByName(String dbName);
     public List<String> getAllNames();
 }

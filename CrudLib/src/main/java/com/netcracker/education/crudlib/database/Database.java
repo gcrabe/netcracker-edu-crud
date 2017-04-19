@@ -5,9 +5,12 @@
  */
 package com.netcracker.education.crudlib.database;
 
+import static com.netcracker.education.crudlib.record.impl.RecordDAOImpl.LOGGER;
 import com.netcracker.education.crudlib.table.Table;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import org.slf4j.event.Level;
 
 /**
  *
@@ -19,8 +22,13 @@ public class Database {
     private Map<String, Table> tables = new HashMap<>(); // tableName, table
     
     public Database(String name) {
-        this.name = name;
-        this.path = DatabaseUtils.getPath() + name;
+        //нет оповещения о некорректном пути
+        if (!DatabaseUtils.nameValidation(name)) {
+            LOGGER.error("Incorrect database name", Level.ERROR);
+        }else{
+            this.name = name;
+            this.path = DatabaseUtils.getPath() + name + '/';
+        }
     }
     
     public String getName(){
@@ -45,5 +53,9 @@ public class Database {
     
     public void removeTable(String tableName){
         tables.remove(tableName);
+    }
+    
+    public List<String> getAllTablesNames(){
+        return (List<String>) tables.keySet();
     }
 }
