@@ -98,10 +98,13 @@ public class DatabaseRepositoryImpl implements DatabaseRepository{
         
         //обновляем базу
         bases.replace(database.getName(), database);
-        
-        //StringBuilder msg = new StringBuilder();
-        //msg.append("Database [").append().append("] successfully renamed to [").append(newDbName).append("].");
-        //LOGGER.info(msg.toString(), Level.INFO);
+
+
+        /*есть мнение, что логирование об этой операции (а метод нужен нам для того, чтобы Макс
+        спокойно мог добавить табличку в базу и поменять объект в bases), я добавлю на уровне работы с таблицами*/
+        /*StringBuilder msg = new StringBuilder();
+        msg.append("Database [").append().append("] successfully renamed to [").append(newDbName).append("].");
+        LOGGER.info(msg.toString(), Level.INFO);*/
         
         return true;
     }
@@ -120,6 +123,11 @@ public class DatabaseRepositoryImpl implements DatabaseRepository{
         }
         //проверка наличия объекта в мапе
         if(bases.containsKey(dbName)){
+
+            StringBuilder msg = new StringBuilder();
+            msg.append("Database [").append(dbName).append("] is not found.");
+            LOGGER.error(msg.toString(), Level.ERROR);
+
             return false;
         }
                 

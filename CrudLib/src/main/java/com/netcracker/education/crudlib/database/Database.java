@@ -52,6 +52,11 @@ public class Database {
         //связываемся с имеющимся файлом и проверяем, существует ли он
         File dbDir = new File(this.path);
         if(!dbDir.exists()){
+
+            StringBuilder msg = new StringBuilder();
+            msg.append("Directory with path [").append(this.path).append("] is not found.");
+            LOGGER.error(msg.toString(), Level.ERROR);
+
             return false;
         }
         
@@ -61,6 +66,10 @@ public class Database {
         //меняем путь на новый и переименовываем
         this.path = DatabaseUtils.getPath() + name + '/';
         dbDir.renameTo(new File(this.path));
+
+        StringBuilder msg = new StringBuilder();
+        msg.append("Database [").append(this.name).append("] renamed to [").append(name).append("] successfully.");
+        LOGGER.info(msg.toString(), Level.INFO);
                 
         return true;
     }
