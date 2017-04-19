@@ -24,7 +24,9 @@ public class Database {
     public Database(String name) {
         //нет оповещения о некорректном пути
         if (!DatabaseUtils.nameValidation(name)) {
-            LOGGER.error("Incorrect database name", Level.ERROR);
+            StringBuilder msg = new StringBuilder();
+            msg.append("Incorrect database name: ").append(name);
+            LOGGER.error(msg.toString(), Level.ERROR);
         }else{
             this.name = name;
             this.path = DatabaseUtils.getPath() + name + '/';

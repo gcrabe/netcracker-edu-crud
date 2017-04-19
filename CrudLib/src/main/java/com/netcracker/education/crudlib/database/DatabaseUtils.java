@@ -51,6 +51,7 @@ public class DatabaseUtils {
             if (!rootDirectory.exists()) {
                 rootDirectory.mkdirs();
             }
+
         } catch (IOException e) {
             LOGGER.error("Property file is not found.", Level.ERROR);
         } finally {
@@ -77,7 +78,11 @@ public class DatabaseUtils {
     public static boolean createDatabaseRepository(String dbName){
         
         if(!DatabaseUtils.nameValidation(dbName)) {
-            LOGGER.error("Incorrect database name", Level.ERROR);
+
+            StringBuilder msg = new StringBuilder();
+            msg.append("Incorrect database name: ").append(dbName);
+            LOGGER.error(msg.toString(), Level.ERROR);
+
             return false;
         }
         
@@ -85,7 +90,11 @@ public class DatabaseUtils {
         File databaseDirectory = new File(fullPath);
         boolean creatingTemp = databaseDirectory.mkdirs();
         if(!creatingTemp){
-            LOGGER.error("Database can't be created.", Level.ERROR);
+
+            StringBuilder msg = new StringBuilder();
+            msg.append("Database [").append(dbName).append("] cant be deleted.");
+            LOGGER.error(msg.toString(), Level.ERROR);
+
             return false;
         }
         
@@ -95,7 +104,11 @@ public class DatabaseUtils {
     public static boolean deleteDatabaseRepository(String dbName){
         
         if (!DatabaseUtils.nameValidation(dbName)) {
-            LOGGER.error("Incorrect database name", Level.ERROR);
+
+            StringBuilder msg = new StringBuilder();
+            msg.append("Incorrect database name: ").append(dbName);
+            LOGGER.error(msg.toString(), Level.ERROR);
+
             return false;
         }
         
@@ -103,7 +116,11 @@ public class DatabaseUtils {
         File databaseDirectory = new File(fullPath);
         boolean deletingTemp = databaseDirectory.delete();
         if(deletingTemp == false){
-            LOGGER.error("Database can't be deleted.", Level.ERROR);
+
+            StringBuilder msg = new StringBuilder();
+            msg.append("Database [").append(dbName).append("] cant be deleted.");
+            LOGGER.error(msg.toString(), Level.ERROR);
+
             return false;
         }
         

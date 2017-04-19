@@ -58,8 +58,11 @@ public class DatabaseRepositoryImpl implements DatabaseRepository{
         //создаем элемент в мапе
         Database tempDatabase = new Database(dbName);
         bases.put(dbName, tempDatabase);
-        
-        LOGGER.info("Database directory created.", Level.INFO);
+
+
+        StringBuilder msg = new StringBuilder();
+        msg.append("Database directory [").append(dbName).append("] created.");
+        LOGGER.info(msg.toString(), Level.INFO);
         
         return true;
     }
@@ -86,7 +89,11 @@ public class DatabaseRepositoryImpl implements DatabaseRepository{
 
     @Override
     public boolean update(String dbName, String newDbName) {
-        
+
+        /*Ай-ай-ай, почему удалили из базы файлик с уже имеющимися табличками и инфой?
+        Тут лучше будет просто переименовать базу, изи скопировать данные из старой в новую, у новой задать НОВОЕ имя,
+        старую удалить из мапы, а новую туда положить.*/
+
         //удаляем старый файл и загружаем новый
         boolean updateTemp = DatabaseUtils.deleteDatabaseRepository(dbName);
         if(!updateTemp){
