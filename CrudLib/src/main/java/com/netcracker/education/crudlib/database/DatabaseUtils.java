@@ -35,7 +35,7 @@ public class DatabaseUtils {
         |(сработает catch, а логгер не зафиксирует место срабатывания данного       |
         |метода)                                                                    |
         ----------------------------------------------------------------------------*/
-        // TODO: parse settings.properties(root path)
+        
         FileInputStream fis = null;
         Properties property = new Properties();
         String dbRoot = "";

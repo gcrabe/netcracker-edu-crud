@@ -14,7 +14,8 @@ import java.util.List;
 public interface DatabaseRepository {
     public boolean create(String dbName);
     public boolean delete(String dbName);
-    public boolean update(String dbName, String newDbName);
+    public boolean update(Database database);
+    public boolean rename(String dbName, String newDbName);
     public Database getByName(String dbName);
     public List<String> getAllNames();
 }

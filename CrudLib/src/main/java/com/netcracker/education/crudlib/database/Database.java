@@ -7,6 +7,7 @@ package com.netcracker.education.crudlib.database;
 
 import static com.netcracker.education.crudlib.record.impl.RecordDAOImpl.LOGGER;
 import com.netcracker.education.crudlib.table.Table;
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,8 +38,31 @@ public class Database {
         return name;
     }
     
-    public void setName(String name){
+    public boolean setName(String name){
+        
+        //проверяем корректность имени
+        if(!DatabaseUtils.nameValidation(name)) {
+
+            StringBuilder msg = new StringBuilder();
+            msg.append("Incorrect database name: ").append(name);
+            LOGGER.error(msg.toString(), Level.ERROR);
+
+            return false;
+        }
+        //связываемся с имеющимся файлом и проверяем, существует ли он
+        File dbDir = new File(this.path);
+        if(!dbDir.exists()){
+            return false;
+        }
+        
+        //переименовываем Database
         this.name = name;
+        
+        //меняем путь на новый и переименовываем
+        this.path = DatabaseUtils.getPath() + name + '/';
+        dbDir.renameTo(new File(this.path));
+                
+        return true;
     }
     
     public String getPath(){

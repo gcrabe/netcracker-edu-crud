@@ -59,7 +59,6 @@ public class DatabaseRepositoryImpl implements DatabaseRepository{
         Database tempDatabase = new Database(dbName);
         bases.put(dbName, tempDatabase);
 
-
         StringBuilder msg = new StringBuilder();
         msg.append("Database directory [").append(dbName).append("] created.");
         LOGGER.info(msg.toString(), Level.INFO);
@@ -76,7 +75,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository{
             return false;
         }
         
-        //удфляем из мапы
+        //удaляем из мапы
         Database tempDatabase = new Database(dbName);
         bases.remove(dbName, tempDatabase);
         
@@ -88,42 +87,33 @@ public class DatabaseRepositoryImpl implements DatabaseRepository{
     }
 
     @Override
-    public boolean update(String dbName, String newDbName) {
-
-        /*Ай-ай-ай, почему удалили из базы файлик с уже имеющимися табличками и инфой?
-        Тут лучше будет просто переименовать базу, изи скопировать данные из старой в новую, у новой задать НОВОЕ имя,
-        старую удалить из мапы, а новую туда положить.*/
-
-        //удаляем старый файл и загружаем новый
-        boolean updateTemp = DatabaseUtils.deleteDatabaseRepository(dbName);
-        if(!updateTemp){
-            return false;
-        }
+    public boolean update(Database database) {
         
-        updateTemp = DatabaseUtils.createDatabaseRepository(newDbName);
-        if(!updateTemp){
-            return false;
-        }
+        //повесить проверки
         
-        //удаляем из мапы и добавляем новую
-        Database tempDatabase = new Database(dbName);
-        bases.remove(dbName, tempDatabase);
+        bases.replace(database.getName(), database);
         
-        tempDatabase = new Database(newDbName);
-        bases.put(dbName, tempDatabase);
-        
-        StringBuilder msg = new StringBuilder();
-        msg.append("Database [").append(dbName).append("] successfully renamed to [").append(newDbName).append("].");
-        LOGGER.info(msg.toString(), Level.INFO);
+        //StringBuilder msg = new StringBuilder();
+        //msg.append("Database [").append().append("] successfully renamed to [").append(newDbName).append("].");
+        //LOGGER.info(msg.toString(), Level.INFO);
         
         return true;
     }
     
-    public boolean update(Database database, Database newDatabase){
+    public boolean rename(String dbName, String newDbName){
         
-        boolean updateTemp = update(database.getName(), newDatabase.getName());
+        //проверить наличие объекта в мапе
+        //проверить корректность имени
         
-        return updateTemp;
+        Database newDatabase = bases.get(dbName);
+        newDatabase.setName(newDbName);
+        
+        bases.remove(dbName);
+        bases.put(newDbName, newDatabase);
+        
+        //LOGGER
+        
+        return true;
     }
 
     @Override
