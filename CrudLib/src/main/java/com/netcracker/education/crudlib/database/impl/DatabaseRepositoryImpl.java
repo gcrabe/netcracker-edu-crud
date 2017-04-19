@@ -8,6 +8,7 @@ package com.netcracker.education.crudlib.database.impl;
 import com.netcracker.education.crudlib.database.Database;
 import com.netcracker.education.crudlib.database.DatabaseRepository;
 import com.netcracker.education.crudlib.database.DatabaseUtils;
+import java.io.File;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +49,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository{
     //описание основных методов
     @Override
     public boolean create(String dbName) {
-        
+                
         //создаем файл
         boolean createDatabaseTemp = DatabaseUtils.createDatabaseRepository(dbName);
         if(!createDatabaseTemp){
@@ -89,7 +90,11 @@ public class DatabaseRepositoryImpl implements DatabaseRepository{
     @Override
     public boolean update(Database database) {
         
-        //повесить проверки
+        //проверка наличия файла
+        File databaseDir = new File(database.getPath());
+        if(!databaseDir.exists()){
+            return false;
+        }
         
         bases.replace(database.getName(), database);
         
@@ -100,11 +105,24 @@ public class DatabaseRepositoryImpl implements DatabaseRepository{
         return true;
     }
     
+    @Override
     public boolean rename(String dbName, String newDbName){
         
-        //проверить наличие объекта в мапе
-        //проверить корректность имени
+        //проверка корректности имени
+        if(!DatabaseUtils.nameValidation(dbName)) {
+
+            StringBuilder msg = new StringBuilder();
+            msg.append("Incorrect database name: ").append(dbName);
+            LOGGER.error(msg.toString(), Level.ERROR);
+
+            return false;
+        }
         
+        //проверка наличия объекта в мапе
+        if(bases.containsKey(dbName)){
+            return false;
+        }
+                
         Database newDatabase = bases.get(dbName);
         newDatabase.setName(newDbName);
         
