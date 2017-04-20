@@ -6,6 +6,7 @@
 package com.netcracker.education.crudlib.database;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -15,7 +16,7 @@ public interface DatabaseRepository {
     public boolean create(String dbName);
     public boolean delete(String dbName);
     public boolean update(Database database);
-    public boolean rename(String dbName, String newDbName);
-    public Database getByName(String dbName);
-    public List<String> getAllNames();
+    public boolean rename(String dbName, String newDbName);//+
+    public Database getByName(String dbName);//+
+    public Set<String> getAllNames();//+
 }

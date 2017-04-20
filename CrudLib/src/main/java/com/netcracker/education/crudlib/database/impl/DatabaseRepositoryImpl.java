@@ -17,6 +17,7 @@ import org.slf4j.event.Level;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -31,17 +32,14 @@ public class DatabaseRepositoryImpl implements DatabaseRepository{
     private DatabaseRepositoryImpl(){} //запрещаем создание объекта извне
     
     public static DatabaseRepositoryImpl getInstance(){
-        DatabaseRepositoryImpl localInstance = instance;
-        
-        if(localInstance == null){
-            localInstance = instance;
-            if(localInstance == null){
-                localInstance = new DatabaseRepositoryImpl();
-                instance = localInstance;
-            }
+
+        if (instance != null){
+            return instance;
         }
-        
-        return localInstance;
+        else {
+            instance = new DatabaseRepositoryImpl();
+            return instance;
+        }
     }
     
     private final Map<String, Database> bases = new HashMap<>();
@@ -122,7 +120,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository{
             return false;
         }
         //проверка наличия объекта в мапе
-        if(bases.containsKey(dbName)){
+        if (!bases.containsKey (dbName)){
 
             StringBuilder msg = new StringBuilder();
             msg.append("Database [").append(dbName).append("] is not found.");
@@ -130,8 +128,9 @@ public class DatabaseRepositoryImpl implements DatabaseRepository{
 
             return false;
         }
-                
-        Database newDatabase = bases.get(dbName);
+
+        Database database = bases.get(dbName);
+        Database newDatabase = new Database (dbName);
         newDatabase.setName(newDbName);
         
         bases.remove(dbName);
@@ -155,9 +154,9 @@ public class DatabaseRepositoryImpl implements DatabaseRepository{
     }
 
     @Override
-    public List<String> getAllNames() {
+    public Set<String> getAllNames() {
         
-        List<String> names = (List<String>) bases.keySet();
+        Set<String> names = bases.keySet();
 
         StringBuilder msg = new StringBuilder();
         msg.append("The user requested all database names.");

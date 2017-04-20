@@ -25,7 +25,7 @@ import org.slf4j.event.Level;
 //нужен ли, если есть getPath для Database
 public class DatabaseUtils {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseRepositoryImpl.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseUtils.class.getName());
 
     public static String getPath() {
 
@@ -59,7 +59,7 @@ public class DatabaseUtils {
                 try {
                     fis.close();
                 } catch (IOException e) {
-                    LOGGER.error("Property file can't be closed.", Level.ERROR);
+                    LOGGER.error("Can't close file.", Level.ERROR);
                 }
             }
         }
@@ -92,7 +92,7 @@ public class DatabaseUtils {
         if(!creatingTemp){
 
             StringBuilder msg = new StringBuilder();
-            msg.append("Database [").append(dbName).append("] cant be deleted.");
+            msg.append("Database [").append(dbName).append("] cant be crated.");
             LOGGER.error(msg.toString(), Level.ERROR);
 
             return false;

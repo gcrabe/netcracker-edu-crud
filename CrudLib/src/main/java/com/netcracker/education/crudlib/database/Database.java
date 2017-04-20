@@ -5,12 +5,14 @@
  */
 package com.netcracker.education.crudlib.database;
 
-import static com.netcracker.education.crudlib.record.impl.RecordDAOImpl.LOGGER;
 import com.netcracker.education.crudlib.table.Table;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
 
 /**
@@ -21,7 +23,9 @@ public class Database {
     private String name;
     private String path;
     private Map<String, Table> tables = new HashMap<>(); // tableName, table
-    
+
+    public static final Logger LOGGER = LoggerFactory.getLogger(Database.class.getName());
+
     public Database(String name) {
         //нет оповещения о некорректном пути
         if (!DatabaseUtils.nameValidation(name)) {
