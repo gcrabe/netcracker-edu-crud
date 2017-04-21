@@ -5,10 +5,8 @@
  */
 package com.netcracker.education.crudlib.database;
 
-import com.netcracker.education.crudlib.database.impl.DatabaseRepositoryImpl;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;

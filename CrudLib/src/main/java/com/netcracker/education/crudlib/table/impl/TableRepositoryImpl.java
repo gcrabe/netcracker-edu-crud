@@ -11,6 +11,7 @@ import com.netcracker.education.crudlib.database.DatabaseUtils;
 import com.netcracker.education.crudlib.database.Database;
 import com.netcracker.education.crudlib.table.Table;
 import com.netcracker.education.crudlib.table.TableRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
@@ -49,15 +50,17 @@ public class TableRepositoryImpl implements TableRepository {
             StringBuilder checkValidationName = new StringBuilder();
             checkValidationName.append(dbName).append(tableName);
 
-            if(DatabaseUtils.nameValidation(String.valueOf(checkValidationName))) {
-                fullTableName.append(DatabaseUtils.getPath()).append(dbName).append('/').append(tableName).append(".txt");//добавляем расширение txt
+            if(DatabaseUtils.nameValidation(checkValidationName.toString())) {
+                fullTableName.append(DatabaseUtils.getPath()).append(dbName)
+                        .append('/').append(tableName).append(".txt");//добавляем расширение txt
             } else {
                 StringBuilder msg = new StringBuilder();
                 msg.append("Incorrect name [").append(dbName).append("] or [").append(tableName).append("].");
                 LOGGER.error(msg.toString(), Level.ERROR);
                 return false;
             }
-            file = new File(dbName, String.valueOf(fullTableName));
+            
+            file = new File(String.valueOf(fullTableName));
 
             if (file.createNewFile()) {
                 Table table = new Table(tableName, fieldNames);
@@ -100,7 +103,8 @@ public class TableRepositoryImpl implements TableRepository {
             checkValidationName.append(dbName).append(tableName);
 
             if(DatabaseUtils.nameValidation(String.valueOf(checkValidationName))) {
-                fullTableName.append(DatabaseUtils.getPath()).append(dbName).append('/').append(tableName).append(".txt");//добавляем расширение txt
+                fullTableName.append(DatabaseUtils.getPath()).append(dbName)
+                        .append('/').append(tableName).append(".txt");//добавляем расширение txt
             }
             else {
                 StringBuilder msg = new StringBuilder();
@@ -108,7 +112,7 @@ public class TableRepositoryImpl implements TableRepository {
                 LOGGER.error(msg.toString(), Level.ERROR);
                 return false;
             }
-            file = new File(dbName, String.valueOf(fullTableName));
+            file = new File(String.valueOf(fullTableName));
             if(file.exists()){
                 Database dbEx = databaseRepositoryImplInstance.getByName(dbName);
                 dbEx.removeTable(tableName);
@@ -130,6 +134,7 @@ public class TableRepositoryImpl implements TableRepository {
             }
         }catch(Throwable e){
 //            LOGGER.error(...); что логать? WAT I NEED TO WRITE IN LOG FILE???
+//              ne smog sozdat' file
             StringBuilder msg = new StringBuilder();
             msg.append("Some shit.");
             LOGGER.error(msg.toString(), Level.ERROR);
@@ -150,7 +155,8 @@ public class TableRepositoryImpl implements TableRepository {
             checkValidationName.append(dbName).append(tableName).append(newTableName);//создано для проверки корректности имени
 
             if(DatabaseUtils.nameValidation(String.valueOf(checkValidationName))) {
-                fullNameTable.append(DatabaseUtils.getPath()).append(dbName).append('/').append(tableName).append(".txt");//добавляем расширение txt
+                fullNameTable.append(DatabaseUtils.getPath()).append(dbName).append('/')
+                        .append(tableName).append(".txt");//добавляем расширение txt
             } else {
                 StringBuilder msg = new StringBuilder();
                 msg.append("Incorrect name [").append(dbName).append("], [").append(tableName).append("] or [").append(newTableName).append("].");
@@ -196,7 +202,8 @@ public class TableRepositoryImpl implements TableRepository {
         Database dbEx = databaseRepositoryImplInstance.getByName(dbName);
 
         StringBuilder msg = new StringBuilder();
-        msg.append("User requested table [").append(tableName).append("] in database [").append(dbName).append("].");
+        msg.append("User requested table [").append(tableName)
+                .append("] in database [").append(dbName).append("].");
         LOGGER.error(msg.toString(), Level.ERROR);
 
         return dbEx.getTable(tableName);
