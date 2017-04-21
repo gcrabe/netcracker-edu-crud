@@ -30,3 +30,44 @@
 2017-04-21 00:33:16 ERROR netcracker.education.crudlib.database.DatabaseUtils:56 method: getPath - Property file is not found.
 2017-04-21 00:33:16 ERROR netcracker.education.crudlib.database.DatabaseUtils:56 method: getPath - Property file is not found.
 2017-04-21 00:33:16 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:63 method: create - Database directory [testDB] created.
+2017-04-21 15:08:35 INFO  netcracker.education.crudlib.database.DatabaseUtils:83 method: getPath - Root directory isn't exist. Root directory created with path ["netcracker-edu-crud\CrudLib\src\dbRoot\"].
+2017-04-21 15:08:35 ERROR netcracker.education.crudlib.database.DatabaseUtils:132 method: createDatabaseRepository - Database [test] cant be crated.
+2017-04-21 15:10:32 INFO  netcracker.education.crudlib.database.DatabaseUtils:83 method: getPath - Root directory isn't exist. Root directory created with path ["netcracker-edu-crud\CrudLib\src\dbRoot\"].
+2017-04-21 15:10:32 ERROR netcracker.education.crudlib.database.DatabaseUtils:132 method: createDatabaseRepository - Database [test] cant be crated.
+2017-04-21 15:11:07 ERROR netcracker.education.crudlib.database.DatabaseUtils:57 method: getPath - Property file is not found.
+2017-04-21 15:11:07 ERROR netcracker.education.crudlib.database.DatabaseUtils:57 method: getPath - Property file is not found.
+2017-04-21 15:11:07 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:63 method: create - Database directory [test] created.
+2017-04-21 15:14:16 ERROR netcracker.education.crudlib.database.DatabaseUtils:57 method: getPath - Property file is not found.
+2017-04-21 15:14:16 ERROR netcracker.education.crudlib.database.DatabaseUtils:97 method: createDatabaseRepository - Database [test] cant be crated.
+2017-04-21 15:14:42 ERROR netcracker.education.crudlib.database.DatabaseUtils:57 method: getPath - Property file is not found.
+2017-04-21 15:14:42 ERROR netcracker.education.crudlib.database.DatabaseUtils:57 method: getPath - Property file is not found.
+2017-04-21 15:14:42 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:63 method: create - Database directory [test] created.
+2017-04-21 15:15:15 ERROR netcracker.education.crudlib.database.DatabaseUtils:97 method: createDatabaseRepository - Database [test] cant be crated.
+2017-04-21 15:17:01 ERROR netcracker.education.crudlib.database.DatabaseUtils:97 method: createDatabaseRepository - Database [test] cant be crated.
+2017-04-21 15:17:16 ERROR netcracker.education.crudlib.database.DatabaseUtils:97 method: createDatabaseRepository - Database [test] cant be crated.
+2017-04-21 15:18:57 ERROR netcracker.education.crudlib.database.DatabaseUtils:97 method: createDatabaseRepository - Database [test] cant be crated.
+2017-04-21 15:21:16 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:63 method: create - Database directory [test] created.
+2017-04-21 15:21:33 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:63 method: create - Database directory [test] created.
+2017-04-21 15:22:03 ERROR netcracker.education.crudlib.database.DatabaseUtils:57 method: getPath - Property file is not found.
+2017-04-21 15:22:03 ERROR netcracker.education.crudlib.database.DatabaseUtils:57 method: getPath - Property file is not found.
+2017-04-21 15:22:03 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:63 method: create - Database directory [test] created.
+2017-04-21 15:24:04 ERROR netcracker.education.crudlib.database.DatabaseUtils:57 method: getPath - Property file is not found.
+2017-04-21 15:24:04 ERROR netcracker.education.crudlib.database.DatabaseUtils:57 method: getPath - Property file is not found.
+2017-04-21 15:24:04 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:63 method: create - Database directory [test] created.
+2017-04-21 15:27:05 ERROR netcracker.education.crudlib.database.DatabaseUtils:57 method: getPath - Property file is not found.
+2017-04-21 15:27:05 ERROR netcracker.education.crudlib.database.DatabaseUtils:57 method: getPath - Property file is not found.
+2017-04-21 15:27:05 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:63 method: create - Database directory [test] created.
+2017-04-21 15:27:52 ERROR netcracker.education.crudlib.database.DatabaseUtils:57 method: getPath - Property file is not found.
+2017-04-21 15:27:52 ERROR netcracker.education.crudlib.database.DatabaseUtils:57 method: getPath - Property file is not found.
+2017-04-21 15:27:52 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:63 method: create - Database directory [test] created.
+2017-04-21 15:30:01 ERROR netcracker.education.crudlib.database.DatabaseUtils:57 method: getPath - Property file is not found.
+2017-04-21 15:30:01 ERROR netcracker.education.crudlib.database.DatabaseUtils:57 method: getPath - Property file is not found.
+2017-04-21 15:30:01 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:63 method: create - Database directory [test] created.
+2017-04-21 15:32:06 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:63 method: create - Database directory [test] created.
+2017-04-21 15:32:24 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:63 method: create - Database directory [test] created.
+2017-04-21 15:33:04 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:63 method: create - Database directory [alex] created.
+2017-04-21 15:34:11 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:63 method: create - Database directory [test] created.
+2017-04-21 15:34:11 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:63 method: create - Database directory [alex] created.
+2017-04-21 15:38:39 INFO  netcracker.education.crudlib.database.DatabaseUtils:55 method: getPath - Root directory created with path [dbRoot\].
+2017-04-21 15:38:39 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:63 method: create - Database directory [test] created.
+2017-04-21 15:38:39 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:63 method: create - Database directory [alex] created.

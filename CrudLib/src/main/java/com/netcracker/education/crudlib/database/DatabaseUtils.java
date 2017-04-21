@@ -10,6 +10,7 @@ import com.netcracker.education.crudlib.database.impl.DatabaseRepositoryImpl;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,35 +36,28 @@ public class DatabaseUtils {
         |(сработает catch, а логгер не зафиксирует место срабатывания данного       |
         |метода)                                                                    |
         ----------------------------------------------------------------------------*/
-        
-        FileInputStream fis = null;
+
         Properties property = new Properties();
         String dbRoot = "";
 
-        try {
-            fis = new FileInputStream("src/main/resources/config.properties");
-            
+        try (InputStream fis = DatabaseUtils.class.getClassLoader().getResourceAsStream("settings.properties");) {
+
             property.load(fis);
             dbRoot = property.getProperty("db.root");
-            
+
             File rootDirectory = new File(dbRoot);
-            
+
             if (!rootDirectory.exists()) {
                 rootDirectory.mkdirs();
+
+                StringBuilder msg = new StringBuilder();
+                msg.append("Root directory created with path [").append(dbRoot).append("].");
+                LOGGER.info(msg.toString(), Level.INFO);
             }
 
         } catch (IOException e) {
             LOGGER.error("Property file is not found.", Level.ERROR);
-        } finally {
-            if (fis != null) {
-                try {
-                    fis.close();
-                } catch (IOException e) {
-                    LOGGER.error("Can't close file.", Level.ERROR);
-                }
-            }
         }
-
         return dbRoot;
     }
     
@@ -85,9 +79,10 @@ public class DatabaseUtils {
 
             return false;
         }
-        
-        String fullPath = DatabaseUtils.getPath() + dbName + '/';
-        File databaseDirectory = new File(fullPath);
+
+        StringBuilder fullPath = new StringBuilder();
+        fullPath.append(DatabaseUtils.getPath()).append(dbName).append("\\");
+        File databaseDirectory = new File(fullPath.toString());
         boolean creatingTemp = databaseDirectory.mkdirs();
         if(!creatingTemp){
 
