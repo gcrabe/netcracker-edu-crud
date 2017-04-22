@@ -5,8 +5,8 @@
  */
 package com.netcracker.education.crudlib.table;
 
+import com.netcracker.education.crudlib.utils.DatabaseUtils;
 
-import com.netcracker.education.crudlib.database.DatabaseUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
@@ -15,12 +15,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  *
  * @author --
  */
 public class Table {
+
     private String name;
     private List<String> fieldNames = new ArrayList<>();
 
@@ -80,7 +80,7 @@ public class Table {
                 LOGGER.error(msg.toString(), Level.ERROR);
             }
 
-        } catch (Throwable e){
+        } catch (Throwable e) {
 
 //            LOGGER.error(...); что логать? WAT I NEED TO WRITE IN LOG FILE???
             StringBuilder msg = new StringBuilder();

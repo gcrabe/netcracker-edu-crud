@@ -13,11 +13,12 @@ import com.netcracker.education.crudlib.database.impl.DatabaseRepositoryImpl;
  * @author Ya
  */
 public class Solution {
-    public static void main(String[] args){
+
+    public static void main(String[] args) {
 
         DatabaseRepository dbr = DatabaseRepositoryImpl.getInstance();
         dbr.create("test");
         dbr.create("qwerty");
     }
-    
+
 }

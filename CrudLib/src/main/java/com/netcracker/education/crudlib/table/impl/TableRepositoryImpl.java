@@ -5,10 +5,10 @@
  */
 package com.netcracker.education.crudlib.table.impl;
 
+import com.netcracker.education.crudlib.database.Database;
 import com.netcracker.education.crudlib.database.DatabaseRepository;
 import com.netcracker.education.crudlib.database.impl.DatabaseRepositoryImpl;
-import com.netcracker.education.crudlib.database.DatabaseUtils;
-import com.netcracker.education.crudlib.database.Database;
+import com.netcracker.education.crudlib.utils.DatabaseUtils;
 import com.netcracker.education.crudlib.table.Table;
 import com.netcracker.education.crudlib.table.TableRepository;
 
@@ -31,13 +31,17 @@ public class TableRepositoryImpl implements TableRepository {
     DatabaseRepository databaseRepositoryImplInstance = DatabaseRepositoryImpl.getInstance();
 
     private static volatile TableRepositoryImpl instance;
-    private TableRepositoryImpl(){}
 
-    public static TableRepositoryImpl getInstance(){
-        if (instance != null){
+    private TableRepositoryImpl() {
+    }
+
+    public static TableRepositoryImpl getInstance() {
+        if (instance != null) {
             instance = new TableRepositoryImpl();
             return instance;
-        } else return instance;
+        } else {
+            return instance;
+        }
     }
 
     @Override
@@ -50,7 +54,7 @@ public class TableRepositoryImpl implements TableRepository {
             StringBuilder checkValidationName = new StringBuilder();
             checkValidationName.append(dbName).append(tableName);
 
-            if(DatabaseUtils.nameValidation(checkValidationName.toString())) {
+            if (DatabaseUtils.nameValidation(checkValidationName.toString())) {
                 fullTableName.append(DatabaseUtils.getPath()).append(dbName)
                         .append('/').append(tableName).append(".txt");//добавляем расширение txt
             } else {
@@ -59,7 +63,7 @@ public class TableRepositoryImpl implements TableRepository {
                 LOGGER.error(msg.toString(), Level.ERROR);
                 return false;
             }
-            
+
             file = new File(String.valueOf(fullTableName));
 
             if (file.createNewFile()) {
@@ -67,7 +71,6 @@ public class TableRepositoryImpl implements TableRepository {
                 Database dbEx = databaseRepositoryImplInstance.getByName(dbName);
                 dbEx.putTable(tableName, table);
                 databaseRepositoryImplInstance.update(dbEx);//возврат объекта на место
-
 
                 StringBuilder msg = new StringBuilder();
                 msg.append("Table [").append(tableName).append("] in database [").append(dbName).append("] created successfully.");
@@ -81,8 +84,7 @@ public class TableRepositoryImpl implements TableRepository {
 
                 return false;
             }
-        }
-        catch(IOException e){
+        } catch (IOException e) {
 
 //            LOGGER.error(...); что логать? WAT I NEED TO WRITE IN LOG FILE???
             StringBuilder msg = new StringBuilder();
@@ -93,27 +95,26 @@ public class TableRepositoryImpl implements TableRepository {
     }
 
     @Override
-    public boolean delete(String dbName, String tableName)  {
+    public boolean delete(String dbName, String tableName) {
         File file = null;
 
-        try{
+        try {
             StringBuffer fullTableName = new StringBuffer();
 
             StringBuffer checkValidationName = new StringBuffer();
             checkValidationName.append(dbName).append(tableName);
 
-            if(DatabaseUtils.nameValidation(String.valueOf(checkValidationName))) {
+            if (DatabaseUtils.nameValidation(String.valueOf(checkValidationName))) {
                 fullTableName.append(DatabaseUtils.getPath()).append(dbName)
                         .append('/').append(tableName).append(".txt");//добавляем расширение txt
-            }
-            else {
+            } else {
                 StringBuilder msg = new StringBuilder();
                 msg.append("Incorrect name [").append(dbName).append("] or [").append(tableName).append("].");
                 LOGGER.error(msg.toString(), Level.ERROR);
                 return false;
             }
             file = new File(String.valueOf(fullTableName));
-            if(file.exists()){
+            if (file.exists()) {
                 Database dbEx = databaseRepositoryImplInstance.getByName(dbName);
                 dbEx.removeTable(tableName);
 
@@ -132,7 +133,7 @@ public class TableRepositoryImpl implements TableRepository {
 
                 return false;
             }
-        }catch(Throwable e){
+        } catch (Throwable e) {
 //            LOGGER.error(...); что логать? WAT I NEED TO WRITE IN LOG FILE???
 //              ne smog sozdat' file
             StringBuilder msg = new StringBuilder();
@@ -143,9 +144,8 @@ public class TableRepositoryImpl implements TableRepository {
         }
     }
 
-
     @Override
-    public boolean update(String dbName, String tableName, String newTableName)  {
+    public boolean update(String dbName, String tableName, String newTableName) {
         File file = null;
 
         try {
@@ -154,7 +154,7 @@ public class TableRepositoryImpl implements TableRepository {
             StringBuffer checkValidationName = new StringBuffer();
             checkValidationName.append(dbName).append(tableName).append(newTableName);//создано для проверки корректности имени
 
-            if(DatabaseUtils.nameValidation(String.valueOf(checkValidationName))) {
+            if (DatabaseUtils.nameValidation(String.valueOf(checkValidationName))) {
                 fullNameTable.append(DatabaseUtils.getPath()).append(dbName).append('/')
                         .append(tableName).append(".txt");//добавляем расширение txt
             } else {
@@ -166,7 +166,7 @@ public class TableRepositoryImpl implements TableRepository {
 
             file = new File(String.valueOf(fullNameTable));
 
-            if (file.exists()){
+            if (file.exists()) {
 
                 Database dbEx = databaseRepositoryImplInstance.getByName(dbName);
                 Table table = dbEx.getTable(tableName);
@@ -195,7 +195,6 @@ public class TableRepositoryImpl implements TableRepository {
 
         }
     }
-
 
     @Override
     public Table getByName(String dbName, String tableName) {

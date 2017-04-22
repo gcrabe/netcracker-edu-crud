@@ -3,15 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.netcracker.education.crudlib.database;
-
+package com.netcracker.education.crudlib.utils;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +19,7 @@ import org.slf4j.event.Level;
  * @author Ya
  */
 //нужен ли, если есть getPath для Database
-public class DatabaseUtils {
+public class DatabaseUtils extends Utils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseUtils.class.getName());
 
@@ -34,7 +31,6 @@ public class DatabaseUtils {
         |(сработает catch, а логгер не зафиксирует место срабатывания данного       |
         |метода)                                                                    |
         ----------------------------------------------------------------------------*/
-
         Properties property = new Properties();
         String dbRoot = "";
 
@@ -58,18 +54,10 @@ public class DatabaseUtils {
         }
         return dbRoot;
     }
-    
-    public static boolean nameValidation(String name) {
-        
-        Pattern pattern = Pattern.compile("(.+)?[><\\|\\?*/:\\\\\"](.+)?");
-        Matcher matcher = pattern.matcher(name);
-        
-        return !matcher.find();
-    }
-    
-    public static boolean createDatabaseRepository(String dbName){
-        
-        if(!DatabaseUtils.nameValidation(dbName)) {
+
+    public static boolean createDatabaseRepository(String dbName) {
+
+        if (!DatabaseUtils.nameValidation(dbName)) {
 
             StringBuilder msg = new StringBuilder();
             msg.append("Incorrect database name: ").append(dbName);
@@ -82,7 +70,7 @@ public class DatabaseUtils {
         fullPath.append(DatabaseUtils.getPath()).append(dbName).append("\\");
         File databaseDirectory = new File(fullPath.toString());
         boolean creatingTemp = databaseDirectory.mkdirs();
-        if(!creatingTemp){
+        if (!creatingTemp) {
 
             StringBuilder msg = new StringBuilder();
             msg.append("Database [").append(dbName).append("] cant be crated.");
@@ -90,12 +78,12 @@ public class DatabaseUtils {
 
             return false;
         }
-        
+
         return true;
     }
-    
-    public static boolean deleteDatabaseRepository(String dbName){
-        
+
+    public static boolean deleteDatabaseRepository(String dbName) {
+
         if (!DatabaseUtils.nameValidation(dbName)) {
 
             StringBuilder msg = new StringBuilder();
@@ -104,11 +92,11 @@ public class DatabaseUtils {
 
             return false;
         }
-        
+
         String fullPath = DatabaseUtils.getPath() + dbName + '/';
         File databaseDirectory = new File(fullPath);
         boolean deletingTemp = databaseDirectory.delete();
-        if(deletingTemp == false){
+        if (deletingTemp == false) {
 
             StringBuilder msg = new StringBuilder();
             msg.append("Database [").append(dbName).append("] cant be deleted.");
@@ -116,7 +104,7 @@ public class DatabaseUtils {
 
             return false;
         }
-        
+
         return true;
     }
 }

@@ -40,5 +40,5 @@ public class RecordDAOImpl implements RecordDAO {
     public Record getByFields(String dbName, String tableName, Map<String, String> fields) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }
