@@ -8,9 +8,9 @@ package com.netcracker.education.crudlib.table.impl;
 import com.netcracker.education.crudlib.database.Database;
 import com.netcracker.education.crudlib.database.DatabaseRepository;
 import com.netcracker.education.crudlib.database.impl.DatabaseRepositoryImpl;
-import com.netcracker.education.crudlib.utils.DatabaseUtils;
 import com.netcracker.education.crudlib.table.Table;
 import com.netcracker.education.crudlib.table.TableRepository;
+import com.netcracker.education.crudlib.utils.TableUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +39,7 @@ public class TableRepositoryImpl implements TableRepository {
         if (instance == null) {
             instance = new TableRepositoryImpl();
         }
-        
+
         return instance;
     }
 
@@ -47,23 +47,16 @@ public class TableRepositoryImpl implements TableRepository {
     public boolean create(String dbName, String tableName, List<String> fieldNames) {
         File file = null;
 
+        String fullName;
+
         try {
-            StringBuilder fullTableName = new StringBuilder();
-
-            StringBuilder checkValidationName = new StringBuilder();
-            checkValidationName.append(dbName).append(tableName);
-
-            if (DatabaseUtils.nameValidation(checkValidationName.toString())) {
-                fullTableName.append(DatabaseUtils.getPath()).append(dbName)
-                        .append('/').append(tableName).append(".txt");//добавляем расширение txt
+            if (TableUtils.getValidation(dbName, tableName)) {
+                fullName = TableUtils.getFullName(dbName, tableName);
             } else {
-                StringBuilder msg = new StringBuilder();
-                msg.append("Incorrect name [").append(dbName).append("] or [").append(tableName).append("].");
-                LOGGER.error(msg.toString(), Level.ERROR);
                 return false;
             }
 
-            file = new File(String.valueOf(fullTableName));
+            file = new File(fullName);
 
             if (file.createNewFile()) {
                 Table table = new Table(tableName, fieldNames);
@@ -85,7 +78,7 @@ public class TableRepositoryImpl implements TableRepository {
             }
         } catch (IOException e) {
 
-//            LOGGER.error(...); что логать? WAT I NEED TO WRITE IN LOG FILE???
+//            LOGGER.error(...); что логать? WhAT I NEED TO WRITE IN LOG FILE???
             StringBuilder msg = new StringBuilder();
             msg.append("Some shit.");
             LOGGER.error(msg.toString(), Level.ERROR);
@@ -97,25 +90,19 @@ public class TableRepositoryImpl implements TableRepository {
     public boolean delete(String dbName, String tableName) {
         File file = null;
 
+        String fullName;
+
         try {
-            StringBuffer fullTableName = new StringBuffer();
-
-            StringBuffer checkValidationName = new StringBuffer();
-            checkValidationName.append(dbName).append(tableName);
-
-            if (DatabaseUtils.nameValidation(String.valueOf(checkValidationName))) {
-                fullTableName.append(DatabaseUtils.getPath()).append(dbName)
-                        .append('/').append(tableName).append(".txt");//добавляем расширение txt
+            if (TableUtils.getValidation(dbName, tableName)) {
+                fullName = TableUtils.getFullName(dbName, tableName);
             } else {
-                StringBuilder msg = new StringBuilder();
-                msg.append("Incorrect name [").append(dbName).append("] or [").append(tableName).append("].");
-                LOGGER.error(msg.toString(), Level.ERROR);
                 return false;
             }
-            file = new File(String.valueOf(fullTableName));
+
+            file = new File(fullName);
             if (file.exists()) {
-                Database dbEx = databaseRepositoryImplInstance.getByName(dbName);
-                dbEx.removeTable(tableName);
+                /*Database dbEx = databaseRepositoryImplInstance.getByName(dbName);
+                dbEx.removeTable(tableName);*/ //getByNamе возвращает null, отсюда падает NPE и метод не отрабатывает.
 
                 file.delete();
 
@@ -127,16 +114,14 @@ public class TableRepositoryImpl implements TableRepository {
             } else {
 
                 StringBuilder msg = new StringBuilder();
-                msg.append("Can't delete file [").append(tableName).append("] in database [").append(tableName).append("].");
+                msg.append("Can't delete file [").append(tableName).append("] in database [").append(dbName).append("].");
                 LOGGER.error(msg.toString(), Level.ERROR);
 
                 return false;
             }
         } catch (Throwable e) {
-//            LOGGER.error(...); что логать? WAT I NEED TO WRITE IN LOG FILE???
-//              ne smog sozdat' file
             StringBuilder msg = new StringBuilder();
-            msg.append("Some shit.");
+            msg.append("File [").append(tableName).append("] not found.");
             LOGGER.error(msg.toString(), Level.ERROR);
             return false;
 
@@ -146,32 +131,24 @@ public class TableRepositoryImpl implements TableRepository {
     @Override
     public boolean update(String dbName, String tableName, String newTableName) {
         File file = null;
+        String fullName;
 
         try {
-            StringBuffer fullNameTable = new StringBuffer();
-
-            StringBuffer checkValidationName = new StringBuffer();
-            checkValidationName.append(dbName).append(tableName).append(newTableName);//создано для проверки корректности имени
-
-            if (DatabaseUtils.nameValidation(String.valueOf(checkValidationName))) {
-                fullNameTable.append(DatabaseUtils.getPath()).append(dbName).append('/')
-                        .append(tableName).append(".txt");//добавляем расширение txt
+            if (TableUtils.getValidation(dbName, tableName)) {
+                fullName = TableUtils.getFullName(dbName, tableName);
             } else {
-                StringBuilder msg = new StringBuilder();
-                msg.append("Incorrect name [").append(dbName).append("], [").append(tableName).append("] or [").append(newTableName).append("].");
-                LOGGER.error(msg.toString(), Level.ERROR);
                 return false;
             }
 
-            file = new File(String.valueOf(fullNameTable));
+            file = new File(fullName);
 
             if (file.exists()) {
 
-                Database dbEx = databaseRepositoryImplInstance.getByName(dbName);
+                /*Database dbEx = databaseRepositoryImplInstance.getByName(dbName);
                 Table table = dbEx.getTable(tableName);
                 table.renameTable(dbName, tableName, newTableName);
-                databaseRepositoryImplInstance.update(dbEx);//возвращаем обновленную базу
-
+                databaseRepositoryImplInstance.update(dbEx);//возвращаем обновленную базу*/ //та же проблема с NPE.
+                //Максим, где ренейм файла в директории?
                 StringBuilder msg = new StringBuilder();
                 msg.append("Table [").append(tableName).append("] in database [").append(dbName).append("] renamed to [").append(newTableName).append("].");
                 LOGGER.info(msg.toString(), Level.INFO);
@@ -186,9 +163,8 @@ public class TableRepositoryImpl implements TableRepository {
             }
 
         } catch (Throwable e) {
-//            LOGGER.error(...); что логать? WAT I NEED TO WRITE IN LOG FILE???
             StringBuilder msg = new StringBuilder();
-            msg.append("Some shit.");
+            msg.append("File [").append(tableName).append("] not found.");
             LOGGER.error(msg.toString(), Level.ERROR);
             return false;
 
@@ -197,25 +173,26 @@ public class TableRepositoryImpl implements TableRepository {
 
     @Override
     public Table getByName(String dbName, String tableName) {
-        Database dbEx = databaseRepositoryImplInstance.getByName(dbName);
+        /*Database dbEx = databaseRepositoryImplInstance.getByName(dbName);*/ //Я даже не тестил, но вижу здесь NPE.
 
         StringBuilder msg = new StringBuilder();
-        msg.append("User requested table [").append(tableName)
-                .append("] in database [").append(dbName).append("].");
+        msg.append("User requested table [").append(tableName).append("] in database [").append(dbName).append("].");
         LOGGER.error(msg.toString(), Level.ERROR);
 
-        return dbEx.getTable(tableName);
+//        return dbEx.getTable(tableName);
+        return null; //заглушка
     }
 
     @Override
     public List<String> getAllNames(String dbName) {
-        Database dbEx = databaseRepositoryImplInstance.getByName(dbName);
+        /*Database dbEx = databaseRepositoryImplInstance.getByName(dbName);*/ //Надо ли объяснять? Снова NPE.
 
         StringBuilder msg = new StringBuilder();
         msg.append("User requested all table names in database [").append(dbName).append("].");
         LOGGER.error(msg.toString(), Level.ERROR);
 
-        return dbEx.getAllTablesNames();
+//        return dbEx.getAllTablesNames();
+        return null; //заглушка
     }
 
 }
