@@ -33,13 +33,11 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
     } //запрещаем создание объекта извне
 
     public static DatabaseRepositoryImpl getInstance() {
-
-        if (instance != null) {
-            return instance;
-        } else {
+        if (instance == null) {
             instance = new DatabaseRepositoryImpl();
-            return instance;
         }
+        
+        return instance;
     }
 
     private final Map<String, Database> bases = new HashMap<>();

@@ -14,6 +14,7 @@ hs_err_pid*
 # NetBeans specific project files
 licenseheader.txt
 nb-configuration.xml
+nbactions.xml
 target
 
 # Idea project files

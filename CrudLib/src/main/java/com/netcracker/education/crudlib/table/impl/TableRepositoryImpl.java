@@ -30,18 +30,17 @@ public class TableRepositoryImpl implements TableRepository {
 
     DatabaseRepository databaseRepositoryImplInstance = DatabaseRepositoryImpl.getInstance();
 
-    private static volatile TableRepositoryImpl instance;
+    private static TableRepositoryImpl instance;
 
     private TableRepositoryImpl() {
     }
 
     public static TableRepositoryImpl getInstance() {
-        if (instance != null) {
+        if (instance == null) {
             instance = new TableRepositoryImpl();
-            return instance;
-        } else {
-            return instance;
         }
+        
+        return instance;
     }
 
     @Override

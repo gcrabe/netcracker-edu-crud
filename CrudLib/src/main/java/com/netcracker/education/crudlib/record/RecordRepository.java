@@ -8,7 +8,7 @@ import java.util.Map;
  *
  * @author batyrev
  */
-public interface RecordDAO {
+public interface RecordRepository {
 
     public void create(String dbName, String tableName, Map<String, String> fields);
 
