@@ -7,6 +7,10 @@ package com.netcracker.education.crudlib;
 
 import com.netcracker.education.crudlib.database.DatabaseRepository;
 import com.netcracker.education.crudlib.database.impl.DatabaseRepositoryImpl;
+import com.netcracker.education.crudlib.table.impl.TableRepositoryImpl;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -19,6 +23,10 @@ public class Solution {
         DatabaseRepository dbr = DatabaseRepositoryImpl.getInstance();
         dbr.create("test");
         dbr.create("qwerty");
+
+
+
+
     }
 
 }

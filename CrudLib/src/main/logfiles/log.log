@@ -71,3 +71,27 @@
 2017-04-21 15:38:39 INFO  netcracker.education.crudlib.database.DatabaseUtils:55 method: getPath - Root directory created with path [dbRoot\].
 2017-04-21 15:38:39 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:63 method: create - Database directory [test] created.
 2017-04-21 15:38:39 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:63 method: create - Database directory [alex] created.
+2017-04-23 16:27:26 INFO  netcracker.education.crudlib.utils.DatabaseUtils:49 method: getPath - Root directory created with path [dbRoot\].
+2017-04-23 16:27:27 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:61 method: create - Database directory [test] created.
+2017-04-23 16:27:27 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:61 method: create - Database directory [qwerty] created.
+2017-04-23 16:27:27 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:147 method: getByName - The user requested a database named [test].
+2017-04-23 16:27:27 INFO  education.crudlib.table.impl.TableRepositoryImpl:69 method: create - Table [first] in database [test] created successfully.
+2017-04-23 16:29:26 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:147 method: getByName - The user requested a database named [test].
+2017-04-23 16:29:26 ERROR education.crudlib.table.impl.TableRepositoryImpl:168 method: update - File [first] not found.
+2017-04-23 16:32:31 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:61 method: create - Database directory [c] created.
+2017-04-23 16:32:31 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:147 method: getByName - The user requested a database named [c].
+2017-04-23 16:32:31 INFO  education.crudlib.table.impl.TableRepositoryImpl:69 method: create - Table [g] in database [c] created successfully.
+2017-04-23 16:32:31 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:147 method: getByName - The user requested a database named [c].
+2017-04-23 16:32:31 INFO  netcracker.education.crudlib.table.Table:87 method: renameTable - Table [g] in database [c] renamed to [k].
+2017-04-23 16:32:31 INFO  education.crudlib.table.impl.TableRepositoryImpl:154 method: update - Table [g] in database [c] renamed to [k].
+2017-04-23 16:35:12 INFO  education.crudlib.table.impl.TableRepositoryImpl:111 method: delete - Table [first] in database [test] deleted successfully.
+2017-04-23 16:38:14 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:147 method: getByName - The user requested a database named [qwerty].
+2017-04-23 16:41:48 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:147 method: getByName - The user requested a database named [qwerty].
+2017-04-23 16:41:48 ERROR education.crudlib.table.impl.TableRepositoryImpl:168 method: update - File [dop] not found.
+2017-04-23 16:42:18 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:147 method: getByName - The user requested a database named [qwerty].
+2017-04-23 16:42:18 ERROR education.crudlib.table.impl.TableRepositoryImpl:125 method: delete - File [dop] not found.
+2017-04-23 16:45:07 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:147 method: getByName - The user requested a database named [qwerty].
+2017-04-23 16:45:07 ERROR education.crudlib.table.impl.TableRepositoryImpl:125 method: delete - File [dop] not found.
+2017-04-23 16:51:58 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:147 method: getByName - The user requested a database named [qwerty].
+2017-04-23 17:08:44 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:147 method: getByName - The user requested a database named [qwerty].
+2017-04-23 18:07:22 ERROR education.crudlib.table.impl.TableRepositoryImpl:168 method: update - File [dop] not found.

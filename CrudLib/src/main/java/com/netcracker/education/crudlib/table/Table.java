@@ -7,6 +7,7 @@ package com.netcracker.education.crudlib.table;
 
 import com.netcracker.education.crudlib.utils.DatabaseUtils;
 
+import com.netcracker.education.crudlib.utils.TableUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
@@ -24,7 +25,7 @@ public class Table {
     private String name;
     private List<String> fieldNames = new ArrayList<>();
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(Table.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(Table.class.getName());
 
     public Table(String tableName, List<String> fieldNames) {
         this.name = tableName;
@@ -56,20 +57,43 @@ public class Table {
 
     public void renameTable(String dbName, String tableName, String newTableName) {
 
-        StringBuffer fullNameTable = new StringBuffer();
-        fullNameTable.append(DatabaseUtils.getPath()).append(dbName).append('/').append(tableName).append(".txt");
+        String fullName = null;
+
+        if (TableUtils.getValidation(dbName, tableName, newTableName)) {
+            fullName = TableUtils.getFullName(dbName, tableName);
+        } else {
+            StringBuilder msg = new StringBuilder();
+            msg.append("Name is not correct");
+            LOGGER.error(msg.toString(), Level.ERROR);
+
+        }
 
         File file = null;
 
+
         try {
+            if(fullName != null) {
+                file = new File(fullName);
+            }
+            else {
+                StringBuilder msg = new StringBuilder();
+                msg.append("null name");
+                LOGGER.error(msg.toString(), Level.ERROR);
 
-            file = new File(String.valueOf(fullNameTable));
+            }
 
-            if (file.exists()) {
+             if (file.exists()) {
 
-                file.renameTo(new File(newTableName));
-                this.name = newTableName;
+                String newFullName = TableUtils.getFullName(dbName, newTableName);
 
+                if(file.renameTo(new File(newFullName))) {
+                    this.name = newTableName;
+                }
+                else{
+                    StringBuilder msg = new StringBuilder();
+                    msg.append("Table [").append(tableName).append("] in database [").append(dbName).append("] has not renamed .");
+                    LOGGER.info(msg.toString(), Level.INFO);
+                }
                 StringBuilder msg = new StringBuilder();
                 msg.append("Table [").append(tableName).append("] in database [").append(dbName).append("] renamed to [").append(newTableName).append("].");
                 LOGGER.info(msg.toString(), Level.INFO);

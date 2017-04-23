@@ -11,11 +11,17 @@ import org.slf4j.LoggerFactory;
  */
 public class TableUtils extends Utils {
     
-    public static final Logger LOGGER = LoggerFactory.getLogger(TableRepositoryImpl.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(TableRepositoryImpl.class.getName());
     
     public static boolean getValidation(String dbName, String tableName){
         StringBuilder checkValidationName = new StringBuilder();
         checkValidationName.append(dbName).append(tableName);
+        return DatabaseUtils.nameValidation(checkValidationName.toString());
+    }
+
+    public static boolean getValidation(String dbName, String tableName, String newTableName){
+        StringBuilder checkValidationName = new StringBuilder();
+        checkValidationName.append(dbName).append(tableName).append(newTableName);
         return DatabaseUtils.nameValidation(checkValidationName.toString());
     }
 

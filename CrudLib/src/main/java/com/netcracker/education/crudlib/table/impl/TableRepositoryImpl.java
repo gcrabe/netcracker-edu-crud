@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class TableRepositoryImpl implements TableRepository {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(TableRepositoryImpl.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(TableRepositoryImpl.class.getName());
 
     DatabaseRepository databaseRepositoryImplInstance = DatabaseRepositoryImpl.getInstance();
 
@@ -101,14 +101,21 @@ public class TableRepositoryImpl implements TableRepository {
 
             file = new File(fullName);
             if (file.exists()) {
-                /*Database dbEx = databaseRepositoryImplInstance.getByName(dbName);
-                dbEx.removeTable(tableName);*/ //getByNamе возвращает null, отсюда падает NPE и метод не отрабатывает.
+                Database dbEx = databaseRepositoryImplInstance.getByName(dbName);
+                dbEx.removeTable(tableName); //getByNamе возвращает null, отсюда падает NPE и метод не отрабатывает.
 
-                file.delete();
+                if(file.delete()){
 
                 StringBuilder msg = new StringBuilder();
                 msg.append("Table [").append(tableName).append("] in database [").append(dbName).append("] deleted successfully.");
-                LOGGER.info(msg.toString(), Level.INFO);
+                LOGGER.info(msg.toString(), Level.INFO);}
+
+                else {
+                    StringBuilder msg = new StringBuilder();
+                    msg.append("Table [").append(tableName).append("] in database [").append(dbName).append("] is not deleted.");
+                    LOGGER.info(msg.toString(), Level.INFO);
+
+                }
 
                 return true;
             } else {
@@ -134,7 +141,7 @@ public class TableRepositoryImpl implements TableRepository {
         String fullName;
 
         try {
-            if (TableUtils.getValidation(dbName, tableName)) {
+            if (TableUtils.getValidation(dbName, tableName, newTableName)) {
                 fullName = TableUtils.getFullName(dbName, tableName);
             } else {
                 return false;
