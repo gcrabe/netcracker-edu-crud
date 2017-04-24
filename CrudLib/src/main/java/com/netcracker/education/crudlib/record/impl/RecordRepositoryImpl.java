@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import jdk.nashorn.internal.parser.JSONParser;
 import org.json.simple.JSONObject;
@@ -189,7 +190,61 @@ public class RecordRepositoryImpl implements RecordRepository {
 
     @Override
     public List<Record> getAll(String dbName, String tableName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String filePath = TableUtils.getFullName(dbName, tableName);
+        
+        if (!TableUtils.getValidation(dbName, tableName)) {
+            return null;
+        }
+        
+        File file = new File(filePath);
+        FileReader fileReader = null;
+        BufferedReader bufferedReader = null;
+        
+        List<Record> records = new ArrayList<>();
+        
+        try {
+            fileReader = new FileReader(file);
+            bufferedReader = new BufferedReader(fileReader);
+            
+            ArrayList<String> lines = new ArrayList<>();
+            String tempLine = null;
+            
+            while ((tempLine = bufferedReader.readLine()) != null) {
+                if (tempLine.trim().isEmpty()) {
+                    continue;
+                }
+                
+                lines.add(tempLine);
+            }
+            
+            ArrayList<JSONObject> objects = new ArrayList<>();
+            
+            for (String line : lines) {
+                JSONObject object = (JSONObject) JSONValue.parseWithException(line);
+                objects.add(object);
+            }
+            
+            for (JSONObject object : objects) {
+                Set<Map.Entry<String, String>> entrySet = object.entrySet();
+                ArrayList<String> tempList = new ArrayList<>();
+                Record record = null;
+                
+                for (Map.Entry<String, String> entry : entrySet) {
+                    tempList.add(entry.getValue());
+                }
+                
+                record = new Record(tempList);
+                records.add(record);
+            }
+        } catch (FileNotFoundException ex) {
+            java.util.logging.Logger.getLogger(RecordRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(RecordRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            java.util.logging.Logger.getLogger(RecordRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return records;
     }
 
     @Override
