@@ -18,5 +18,5 @@ public interface RecordRepository {
     
     public List<Record> getAll(String dbName, String tableName);
     
-    public Record getByFields(String dbName, String tableName, Map<String, String> fields);
+    public List<Record> getByFields(String dbName, String tableName, Map<String, String> fields);
 }
