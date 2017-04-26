@@ -7,6 +7,7 @@ package com.netcracker.education.crudlib.database.impl;
 
 import com.netcracker.education.crudlib.database.Database;
 import com.netcracker.education.crudlib.database.DatabaseRepository;
+import com.netcracker.education.crudlib.table.Table;
 import com.netcracker.education.crudlib.utils.DatabaseUtils;
 import java.io.File;
 
@@ -14,9 +15,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import static com.netcracker.education.crudlib.utils.DatabaseUtils.getPath;
 
 /**
  *
@@ -50,6 +54,14 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
         boolean createDatabaseTemp = DatabaseUtils.createDatabaseRepository(dbName);
         if (!createDatabaseTemp) {
             return false;
+        }
+
+        //создаем файл конфигураций
+        File tableStore = new File(dbName + "TableStore.txt");
+        try {
+            tableStore.createNewFile ();
+        } catch (IOException e) {
+            //LOGGER
         }
 
         //создаем элемент в мапе
@@ -159,6 +171,37 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
         LOGGER.info(msg.toString(), Level.INFO);
 
         return names;
+    }
+
+    //получаем базы при новом запуске
+    public static Map<String, Database> getExistBases(){
+
+        Map<String, Database> bases  = new HashMap<>();
+        File dbRoot = new File(DatabaseUtils.getPath());
+        File[] dbNames =  dbRoot.listFiles();
+
+        for(int i = 0; i < dbNames.length; i++){
+
+            Database database = new Database(dbNames[i].getName());
+            database.setTables(getExistTables(database));
+            bases.put(database.getName(), database);
+        }
+
+        return bases;
+    }
+
+    private static Map<String, Table> getExistTables(Database database){
+
+        Map<String, Table> tables = new HashMap();
+        File databaseFile = new File(DatabaseUtils.getPath() + database.getName());
+        File[] tableFiles = databaseFile.listFiles();
+
+        for(int i = 0; i < tableFiles.length; i++){
+
+            tables.put(tableFiles[i].getName(), new Table(tableFiles[i].getName(), null));
+        }
+
+        return tables;
     }
 
 }

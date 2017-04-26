@@ -99,4 +99,8 @@ public class Database {
     public List<String> getAllTablesNames() {
         return (List<String>) tables.keySet();
     }
+
+    public void setTables(Map<String,Table> tables) {
+        this.tables = tables;
+    }
 }

@@ -332,6 +332,7 @@ public class RecordRepositoryImpl implements RecordRepository {
                 }
             }
         }
+        return records;//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
 }
