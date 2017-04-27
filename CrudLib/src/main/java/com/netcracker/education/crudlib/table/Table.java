@@ -44,7 +44,9 @@ public class Table {
             LOGGER.error(msg.toString(), Level.ERROR);
 
             return false;
+
         } else {
+
             this.name = name;
 
             StringBuilder msg = new StringBuilder();
@@ -52,65 +54,6 @@ public class Table {
             LOGGER.info(msg.toString(), Level.INFO);
 
             return true;
-        }
-    }
-
-    public void renameTable(String dbName, String tableName, String newTableName) {
-
-        String fullName = null;
-
-        if (TableUtils.getValidation(dbName, tableName, newTableName)) {
-            fullName = TableUtils.getFullName(dbName, tableName);
-        } else {
-            StringBuilder msg = new StringBuilder();
-            msg.append("Name is not correct");
-            LOGGER.error(msg.toString(), Level.ERROR);
-
-        }
-
-        File file = null;
-
-
-        try {
-            if(fullName != null) {
-                file = new File(fullName);
-            }
-            else {
-                StringBuilder msg = new StringBuilder();
-                msg.append("null name");
-                LOGGER.error(msg.toString(), Level.ERROR);
-
-            }
-
-             if (file.exists()) {
-
-                String newFullName = TableUtils.getFullName(dbName, newTableName);
-
-                if(file.renameTo(new File(newFullName))) {
-                    this.name = newTableName;
-                }
-                else{
-                    StringBuilder msg = new StringBuilder();
-                    msg.append("Table [").append(tableName).append("] in database [").append(dbName).append("] has not renamed .");
-                    LOGGER.info(msg.toString(), Level.INFO);
-                }
-                StringBuilder msg = new StringBuilder();
-                msg.append("Table [").append(tableName).append("] in database [").append(dbName).append("] renamed to [").append(newTableName).append("].");
-                LOGGER.info(msg.toString(), Level.INFO);
-
-            } else {
-                StringBuilder msg = new StringBuilder();
-                msg.append("Table [").append(tableName).append("] isn't found.");
-                LOGGER.error(msg.toString(), Level.ERROR);
-            }
-
-        } catch (Throwable e) {
-
-//            LOGGER.error(...); что логать? WAT I NEED TO WRITE IN LOG FILE???
-            StringBuilder msg = new StringBuilder();
-            msg.append("Some shit.");
-            LOGGER.error(msg.toString(), Level.ERROR);
-
         }
     }
 }

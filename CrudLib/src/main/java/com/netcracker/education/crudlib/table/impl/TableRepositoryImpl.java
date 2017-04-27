@@ -39,7 +39,6 @@ public class TableRepositoryImpl implements TableRepository {
         if (instance == null) {
             instance = new TableRepositoryImpl();
         }
-
         return instance;
     }
 
@@ -71,7 +70,7 @@ public class TableRepositoryImpl implements TableRepository {
                 return true;
             } else {
                 StringBuilder msg = new StringBuilder();
-                msg.append("Can't create file [").append(tableName).append("] in database [").append(tableName).append("].");
+                msg.append("Can't create file [").append(tableName).append("] in database [").append(dbName).append("].");
                 LOGGER.error(msg.toString(), Level.ERROR);
 
                 return false;
@@ -102,9 +101,11 @@ public class TableRepositoryImpl implements TableRepository {
             file = new File(fullName);
             if (file.exists()) {
                 Database dbEx = databaseRepositoryImplInstance.getByName(dbName);
-                dbEx.removeTable(tableName); //getByNamе возвращает null, отсюда падает NPE и метод не отрабатывает.
+                dbEx.removeTable(tableName);
 
                 if(file.delete()){
+
+                    databaseRepositoryImplInstance.update(dbEx);
 
                 StringBuilder msg = new StringBuilder();
                 msg.append("Table [").append(tableName).append("] in database [").append(dbName).append("] deleted successfully.");
@@ -151,11 +152,19 @@ public class TableRepositoryImpl implements TableRepository {
 
             if (file.exists()) {
 
-                /*Database dbEx = databaseRepositoryImplInstance.getByName(dbName);
+                Database dbEx = databaseRepositoryImplInstance.getByName(dbName);
                 Table table = dbEx.getTable(tableName);
-                table.renameTable(dbName, tableName, newTableName);
-                databaseRepositoryImplInstance.update(dbEx);//возвращаем обновленную базу*/ //та же проблема с NPE.
-                //Максим, где ренейм файла в директории?
+                table.setName(newTableName);
+
+                String newFullName = TableUtils.getFullName(dbName, newTableName);
+
+                if(file.renameTo(new File(newFullName))) {
+                    databaseRepositoryImplInstance.update(dbEx);
+                }
+                else{
+                    //LOGGER
+                }
+
                 StringBuilder msg = new StringBuilder();
                 msg.append("Table [").append(tableName).append("] in database [").append(dbName).append("] renamed to [").append(newTableName).append("].");
                 LOGGER.info(msg.toString(), Level.INFO);
