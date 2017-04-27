@@ -103,15 +103,14 @@ public class TableRepositoryImpl implements TableRepository {
                 Database dbEx = databaseRepositoryImplInstance.getByName(dbName);
                 dbEx.removeTable(tableName);
 
-                if(file.delete()){
+                if (file.delete()) {
 
                     databaseRepositoryImplInstance.update(dbEx);
 
-                StringBuilder msg = new StringBuilder();
-                msg.append("Table [").append(tableName).append("] in database [").append(dbName).append("] deleted successfully.");
-                LOGGER.info(msg.toString(), Level.INFO);}
-
-                else {
+                    StringBuilder msg = new StringBuilder();
+                    msg.append("Table [").append(tableName).append("] in database [").append(dbName).append("] deleted successfully.");
+                    LOGGER.info(msg.toString(), Level.INFO);
+                } else {
                     StringBuilder msg = new StringBuilder();
                     msg.append("Table [").append(tableName).append("] in database [").append(dbName).append("] is not deleted.");
                     LOGGER.info(msg.toString(), Level.INFO);
@@ -158,10 +157,9 @@ public class TableRepositoryImpl implements TableRepository {
 
                 String newFullName = TableUtils.getFullName(dbName, newTableName);
 
-                if(file.renameTo(new File(newFullName))) {
+                if (file.renameTo(new File(newFullName))) {
                     databaseRepositoryImplInstance.update(dbEx);
-                }
-                else{
+                } else {
                     //LOGGER
                 }
 

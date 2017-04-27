@@ -40,7 +40,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
         if (instance == null) {
             instance = new DatabaseRepositoryImpl();
         }
-        
+
         return instance;
     }
 
@@ -59,7 +59,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
         //создаем файл конфигураций
         File tableStore = new File(dbName + "TableStore.txt");
         try {
-            tableStore.createNewFile ();
+            tableStore.createNewFile();
         } catch (IOException e) {
             //LOGGER
         }
@@ -174,13 +174,13 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
     }
 
     //получаем базы при новом запуске
-    public static Map<String, Database> getExistBases(){
+    public static Map<String, Database> getExistBases() {
 
-        Map<String, Database> bases  = new HashMap<>();
+        Map<String, Database> bases = new HashMap<>();
         File dbRoot = new File(DatabaseUtils.getPath());
-        File[] dbNames =  dbRoot.listFiles();
+        File[] dbNames = dbRoot.listFiles();
 
-        for(int i = 0; i < dbNames.length; i++){
+        for (int i = 0; i < dbNames.length; i++) {
 
             Database database = new Database(dbNames[i].getName());
             database.setTables(getExistTables(database));
@@ -190,13 +190,13 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
         return bases;
     }
 
-    private static Map<String, Table> getExistTables(Database database){
+    private static Map<String, Table> getExistTables(Database database) {
 
         Map<String, Table> tables = new HashMap();
         File databaseFile = new File(DatabaseUtils.getPath() + database.getName());
         File[] tableFiles = databaseFile.listFiles();
 
-        for(int i = 0; i < tableFiles.length; i++){
+        for (int i = 0; i < tableFiles.length; i++) {
 
             tables.put(tableFiles[i].getName(), new Table(tableFiles[i].getName(), null));
         }

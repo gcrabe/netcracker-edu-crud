@@ -100,7 +100,7 @@ public class Database {
         return (List<String>) tables.keySet();
     }
 
-    public void setTables(Map<String,Table> tables) {
+    public void setTables(Map<String, Table> tables) {
         this.tables = tables;
     }
 }

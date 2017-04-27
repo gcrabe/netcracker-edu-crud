@@ -32,50 +32,50 @@ import org.json.simple.parser.ParseException;
 public class RecordRepositoryImpl implements RecordRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RecordRepositoryImpl.class.getName());
-    
+
     private static TableRepository tableRepositoryInstance = TableRepositoryImpl.getInstance();
-    
+
     private static RecordRepositoryImpl instance;
-    
+
     private RecordRepositoryImpl() {
     }
-    
+
     public static RecordRepositoryImpl getInstance() {
         if (instance == null) {
             instance = new RecordRepositoryImpl();
         }
-        
+
         return instance;
     }
-    
+
     @Override
     public boolean create(String dbName, String tableName, Map<String, String> fields) {
         String filePath = TableUtils.getFullName(dbName, tableName);
-        
+
         if (!TableUtils.getValidation(dbName, tableName)) {
             return false;
         }
-        
+
         File file = new File(filePath);
         FileWriter fileWriter = null;
         BufferedWriter bufferedWriter = null;
-        
+
         try {
             fileWriter = new FileWriter(file, true);
             bufferedWriter = new BufferedWriter(fileWriter);
-            
+
             JSONObject jsonObject = new JSONObject();
-            
+
             for (Map.Entry<String, String> entry : fields.entrySet()) {
                 String key = entry.getKey();
                 String value = entry.getValue();
-                
+
                 jsonObject.put(key, value);
             }
-            
+
             String jsonString = jsonObject.toJSONString();
             bufferedWriter.write(jsonString);
-            
+
             bufferedWriter.newLine();
         } catch (IOException ex) {
             java.util.logging.Logger.getLogger(RecordRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -91,64 +91,64 @@ public class RecordRepositoryImpl implements RecordRepository {
                 }
             }
         }
-        
+
         return true;
     }
-    
+
     @Override
     public boolean delete(String dbName, String tableName, Map<String, String> fields) {
         String filePath = TableUtils.getFullName(dbName, tableName);
-        
+
         if (!TableUtils.getValidation(dbName, tableName)) {
             return false;
         }
-        
+
         File file = new File(filePath);
         FileReader fileReader = null;
         BufferedReader bufferedReader = null;
-        
+
         FileWriter fileWriter = null;
         BufferedWriter bufferedWriter = null;
-        
+
         try {
             fileReader = new FileReader(file);
             bufferedReader = new BufferedReader(fileReader);
-            
+
             ArrayList<String> lines = new ArrayList<>();
             String tempLine = null;
-            
+
             while ((tempLine = bufferedReader.readLine()) != null) {
                 if (tempLine.trim().isEmpty()) {
                     continue;
                 }
-                
+
                 boolean isCorrect = true;
-                
+
                 for (Map.Entry<String, String> entry : fields.entrySet()) {
                     String pattern = '\"' + entry.getKey() + "\":\"" + entry.getValue() + '\"';
-                    
+
                     if (tempLine.contains(pattern)) {
                         isCorrect = false;
                     }
                 }
-                
+
                 if (isCorrect) {
                     lines.add(tempLine);
                 }
             }
-            
+
             ArrayList<JSONObject> objects = new ArrayList<>();
-            
+
             for (String line : lines) {
                 JSONObject object = (JSONObject) JSONValue.parseWithException(line);
                 objects.add(object);
             }
-            
+
             fileWriter = new FileWriter(file);
             bufferedWriter = new BufferedWriter(fileWriter);
-            
+
             fileWriter.write("");
-            
+
             for (JSONObject object : objects) {
                 String jsonString = object.toJSONString();
                 bufferedWriter.write(jsonString);
@@ -169,9 +169,9 @@ public class RecordRepositoryImpl implements RecordRepository {
                     java.util.logging.Logger.getLogger(RecordRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            
+
             if (bufferedWriter != null) {
-                try  {
+                try {
                     bufferedWriter.close();
                     fileWriter.close();
                 } catch (IOException ex) {
@@ -179,10 +179,10 @@ public class RecordRepositoryImpl implements RecordRepository {
                 }
             }
         }
-        
+
         return true;
     }
-    
+
     @Override
     public boolean update(String dbName, String tableName, Map<String, String> fields) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -191,48 +191,48 @@ public class RecordRepositoryImpl implements RecordRepository {
     @Override
     public List<Record> getAll(String dbName, String tableName) {
         String filePath = TableUtils.getFullName(dbName, tableName);
-        
+
         if (!TableUtils.getValidation(dbName, tableName)) {
             return null;
         }
-        
+
         File file = new File(filePath);
         FileReader fileReader = null;
         BufferedReader bufferedReader = null;
-        
+
         List<Record> records = new ArrayList<>();
-        
+
         try {
             fileReader = new FileReader(file);
             bufferedReader = new BufferedReader(fileReader);
-            
+
             ArrayList<String> lines = new ArrayList<>();
             String tempLine = null;
-            
+
             while ((tempLine = bufferedReader.readLine()) != null) {
                 if (tempLine.trim().isEmpty()) {
                     continue;
                 }
-                
+
                 lines.add(tempLine);
             }
-            
+
             ArrayList<JSONObject> objects = new ArrayList<>();
-            
+
             for (String line : lines) {
                 JSONObject object = (JSONObject) JSONValue.parseWithException(line);
                 objects.add(object);
             }
-            
+
             for (JSONObject object : objects) {
                 Set<Map.Entry<String, String>> entrySet = object.entrySet();
                 ArrayList<String> tempList = new ArrayList<>();
                 Record record = null;
-                
+
                 for (Map.Entry<String, String> entry : entrySet) {
                     tempList.add(entry.getValue());
                 }
-                
+
                 record = new Record(tempList);
                 records.add(record);
             }
@@ -252,67 +252,67 @@ public class RecordRepositoryImpl implements RecordRepository {
                 }
             }
         }
-        
+
         return records;
     }
 
     @Override
     public List<Record> getByFields(String dbName, String tableName, Map<String, String> fields) {
         String filePath = TableUtils.getFullName(dbName, tableName);
-        
+
         if (!TableUtils.getValidation(dbName, tableName)) {
             return null;
         }
-        
+
         File file = new File(filePath);
         FileReader fileReader = null;
         BufferedReader bufferedReader = null;
-        
+
         List<Record> records = new ArrayList<>();
-        
+
         try {
             fileReader = new FileReader(file);
             bufferedReader = new BufferedReader(fileReader);
-            
+
             ArrayList<String> lines = new ArrayList<>();
             String tempLine = null;
-            
+
             while ((tempLine = bufferedReader.readLine()) != null) {
                 if (tempLine.trim().isEmpty()) {
                     continue;
                 }
-                
+
                 boolean isCorrect = true;
-                
+
                 for (Map.Entry<String, String> entry : fields.entrySet()) {
                     String pattern = '\"' + entry.getKey() + "\":\"" + entry.getValue() + '\"';
-                    
+
                     if (tempLine.contains(pattern)) {
                         isCorrect = false;
                     }
                 }
-                
+
                 if (isCorrect) {
                     lines.add(tempLine);
                 }
             }
-            
+
             ArrayList<JSONObject> objects = new ArrayList<>();
-            
+
             for (String line : lines) {
                 JSONObject object = (JSONObject) JSONValue.parseWithException(line);
                 objects.add(object);
             }
-            
+
             for (JSONObject object : objects) {
                 Set<Map.Entry<String, String>> entrySet = object.entrySet();
                 ArrayList<String> tempList = new ArrayList<>();
                 Record record = null;
-                
+
                 for (Map.Entry<String, String> entry : entrySet) {
                     tempList.add(entry.getValue());
                 }
-                
+
                 record = new Record(tempList);
                 records.add(record);
             }
