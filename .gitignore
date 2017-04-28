@@ -17,6 +17,9 @@ nb-configuration.xml
 nbactions.xml
 target
 
+# application log files
+logfiles
+
 # Idea project files
 .idea
 *.iml
