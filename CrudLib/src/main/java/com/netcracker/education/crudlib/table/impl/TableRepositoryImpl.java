@@ -28,7 +28,7 @@ public class TableRepositoryImpl implements TableRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TableRepositoryImpl.class.getName());
 
-    DatabaseRepository databaseRepositoryImplInstance = DatabaseRepositoryImpl.getInstance();
+    DatabaseRepositoryImpl databaseRepositoryImplInstance = DatabaseRepositoryImpl.getInstance();
 
     private static TableRepositoryImpl instance;
 
@@ -62,6 +62,8 @@ public class TableRepositoryImpl implements TableRepository {
                 Database dbEx = databaseRepositoryImplInstance.getByName(dbName);
                 dbEx.putTable(tableName, table);
                 databaseRepositoryImplInstance.update(dbEx);//возврат объекта на место
+
+                TableUtils.writeToTableStore(dbName, table);
 
                 StringBuilder msg = new StringBuilder();
                 msg.append("Table [").append(tableName).append("] in database [").append(dbName).append("] created successfully.");
@@ -187,14 +189,13 @@ public class TableRepositoryImpl implements TableRepository {
 
     @Override
     public Table getByName(String dbName, String tableName) {
-        /*Database dbEx = databaseRepositoryImplInstance.getByName(dbName);*/ //Я даже не тестил, но вижу здесь NPE.
+        Database dbEx = databaseRepositoryImplInstance.getByName(dbName); //Я даже не тестил, но вижу здесь NPE.
 
         StringBuilder msg = new StringBuilder();
         msg.append("User requested table [").append(tableName).append("] in database [").append(dbName).append("].");
         LOGGER.error(msg.toString(), Level.ERROR);
 
-//        return dbEx.getTable(tableName);
-        return null; //заглушка
+        return dbEx.getTable(tableName);
     }
 
     @Override

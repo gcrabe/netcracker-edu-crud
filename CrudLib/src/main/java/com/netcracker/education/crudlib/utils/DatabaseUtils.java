@@ -73,7 +73,7 @@ public class DatabaseUtils extends Utils {
         if (!creatingTemp) {
 
             StringBuilder msg = new StringBuilder();
-            msg.append("Database [").append(dbName).append("] cant be crated.");
+            msg.append("Database [").append(dbName).append("] cant be created.");
             LOGGER.error(msg.toString(), Level.ERROR);
 
             return false;

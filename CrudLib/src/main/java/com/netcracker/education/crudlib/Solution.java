@@ -9,8 +9,10 @@ import com.netcracker.education.crudlib.database.DatabaseRepository;
 import com.netcracker.education.crudlib.database.impl.DatabaseRepositoryImpl;
 import com.netcracker.education.crudlib.record.RecordRepository;
 import com.netcracker.education.crudlib.record.impl.RecordRepositoryImpl;
+import com.netcracker.education.crudlib.table.Table;
 import com.netcracker.education.crudlib.table.TableRepository;
 import com.netcracker.education.crudlib.table.impl.TableRepositoryImpl;
+import com.netcracker.education.crudlib.utils.TableUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,17 +29,16 @@ public class Solution {
         DatabaseRepository databaseRepository = DatabaseRepositoryImpl.getInstance();
         TableRepository tableRepository = TableRepositoryImpl.getInstance();
         RecordRepository recordRepository = RecordRepositoryImpl.getInstance();
-        
-//        HashMap<String, String> map = new HashMap<>();
-//        map.put("first", "1");
-//        map.put("second", "2");
-//        recordRepository.create("test_db", "test_table", map);
-//        recordRepository.create("test_db", "test_table", map);
-//        map.clear();
-//        map.put("third", "3");
-//        recordRepository.create("test_db", "test_table", map);
-        
-//        recordRepository.delete("test_db", "test_table", map);
+
+        databaseRepository.create("test");
+/*
+        List<String> fields = new ArrayList<>();
+        fields.add("1");
+        fields.add("2");
+
+        tableRepository.create("test", "table", fields);
+
+        System.err.println(tableRepository.getByName("test", "table").toString());*/
     }
 
 }

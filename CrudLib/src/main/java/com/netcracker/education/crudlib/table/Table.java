@@ -44,9 +44,7 @@ public class Table {
             LOGGER.error(msg.toString(), Level.ERROR);
 
             return false;
-
         } else {
-
             this.name = name;
 
             StringBuilder msg = new StringBuilder();
@@ -55,5 +53,14 @@ public class Table {
 
             return true;
         }
+    }
+
+    public List<String> getFieldNames() {
+        return this.fieldNames;
+    }
+
+    @Override
+    public String toString() {
+        return "{" + this.getName() + ", " + this.getFieldNames().toString() + "}";
     }
 }

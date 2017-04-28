@@ -95,3 +95,10 @@
 2017-04-23 16:51:58 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:147 method: getByName - The user requested a database named [qwerty].
 2017-04-23 17:08:44 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:147 method: getByName - The user requested a database named [qwerty].
 2017-04-23 18:07:22 ERROR education.crudlib.table.impl.TableRepositoryImpl:168 method: update - File [dop] not found.
+2017-04-28 19:09:51 INFO  netcracker.education.crudlib.utils.DatabaseUtils:49 method: getPath - Root directory created with path [dbRoot\].
+2017-04-28 19:09:51 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:74 method: create - Database directory [test] created.
+2017-04-28 19:09:51 INFO  education.crudlib.database.impl.DatabaseRepositoryImpl:164 method: getByName - The user requested a database named [test].
+2017-04-28 19:30:14 ERROR netcracker.education.crudlib.utils.DatabaseUtils:77 method: createDatabaseRepository - Database [test] cant be crated.
+2017-04-28 19:31:30 ERROR netcracker.education.crudlib.utils.DatabaseUtils:77 method: createDatabaseRepository - Database [test] cant be crated.
+2017-04-28 19:33:36 ERROR netcracker.education.crudlib.utils.DatabaseUtils:77 method: createDatabaseRepository - Database [test] cant be created.
+2017-04-28 19:38:16 ERROR netcracker.education.crudlib.utils.DatabaseUtils:84 method: createDatabaseRepository - Database [test] cant be created.

@@ -1,5 +1,8 @@
 package com.netcracker.education.crudlib.utils;
 
+import com.netcracker.education.crudlib.database.Database;
+import com.netcracker.education.crudlib.database.impl.DatabaseRepositoryImpl;
+import com.netcracker.education.crudlib.table.Table;
 import com.netcracker.education.crudlib.table.impl.TableRepositoryImpl;
 
 import org.slf4j.Logger;
@@ -29,5 +32,12 @@ public class TableUtils extends Utils {
         StringBuilder fullTableName = new StringBuilder();
         fullTableName.append(DatabaseUtils.getPath()).append(dbName).append("\\").append(tableName).append(".txt");
         return fullTableName.toString();
+    }
+
+    public static void writeToTableStore(String dbName, Table table) {
+        Database database = DatabaseRepositoryImpl.getInstance().getByName(dbName);
+        String dbPath = database.getPath();
+
+        System.err.println(dbPath);
     }
 }

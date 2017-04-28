@@ -17,8 +17,6 @@ public interface DatabaseRepository {
 
     public boolean delete(String dbName);
 
-    public boolean update(Database database);
-
     public boolean rename(String dbName, String newDbName);//+
 
     public Database getByName(String dbName);//+

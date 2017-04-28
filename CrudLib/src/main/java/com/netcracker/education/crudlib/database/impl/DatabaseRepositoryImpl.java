@@ -96,7 +96,6 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
         return true;
     }
 
-    @Override
     public boolean update(Database database) {
 
         //проверка наличия файла
@@ -130,6 +129,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 
             return false;
         }
+
         //проверка наличия объекта в мапе
         if (!bases.containsKey(dbName)) {
 
@@ -141,11 +141,10 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
         }
 
         Database database = bases.get(dbName);
-        Database newDatabase = new Database(dbName);
-        newDatabase.setName(newDbName);
+        database.setName(newDbName);
 
         bases.remove(dbName);
-        bases.put(newDbName, newDatabase);
+        bases.put(newDbName, database);
 
         StringBuilder msg = new StringBuilder();
         msg.append("Database [").append(dbName).append("] renamed to [").append(newDbName).append("] successfully.");
@@ -158,6 +157,12 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
     public Database getByName(String dbName) {
 
         Database database = bases.get(dbName);
+
+        if(database.equals(null)){
+            //Logger
+        }else{
+            //Logger
+        }
 
         StringBuilder msg = new StringBuilder();
         msg.append("The user requested a database named [").append(dbName).append("].");
@@ -179,7 +184,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
     }
 
     //получаем базы при новом запуске
-    public static Map<String, Database> getExistBases() {
+    public Map<String, Database> getExistBases() {
 
         Map<String, Database> bases = new HashMap<>();
         File dbRoot = new File(DatabaseUtils.getPath());
