@@ -52,6 +52,10 @@ public class RecordRepositoryImpl implements RecordRepository {
         String filePath = TableUtils.getFullName(dbName, tableName);
 
         if (!RecordUtils.getValidation(dbName, tableName)) {
+            StringBuilder msg = new StringBuilder();
+            msg.append("Invalid characters in path [").append(dbName)
+                    .append("/").append(tableName).append("].");
+            LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
             return false;
         }
         
@@ -112,7 +116,11 @@ public class RecordRepositoryImpl implements RecordRepository {
     public boolean delete(String dbName, String tableName, Map<String, String> fields) {
         String filePath = TableUtils.getFullName(dbName, tableName);
 
-        if (!TableUtils.getValidation(dbName, tableName)) {
+        if (!RecordUtils.getValidation(dbName, tableName)) {
+            StringBuilder msg = new StringBuilder();
+            msg.append("Invalid characters in path [").append(dbName)
+                    .append("/").append(tableName).append("].");
+            LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
             return false;
         }
         
@@ -122,7 +130,9 @@ public class RecordRepositoryImpl implements RecordRepository {
 
         FileWriter fileWriter = null;
         BufferedWriter bufferedWriter = null;
-
+        
+        ArrayList<JSONObject> objects = null;
+        
         try {
             fileReader = new FileReader(file);
             bufferedReader = new BufferedReader(fileReader);
@@ -150,7 +160,7 @@ public class RecordRepositoryImpl implements RecordRepository {
                 }
             }
 
-            ArrayList<JSONObject> objects = new ArrayList<>();
+            objects = new ArrayList<>();
 
             for (String line : lines) {
                 JSONObject object = (JSONObject) JSONValue.parseWithException(line);
@@ -161,25 +171,67 @@ public class RecordRepositoryImpl implements RecordRepository {
             bufferedWriter = new BufferedWriter(fileWriter);
 
             fileWriter.write("");
-
+            
             for (JSONObject object : objects) {
                 String jsonString = object.toJSONString();
                 bufferedWriter.write(jsonString);
                 bufferedWriter.newLine();
             }
+            
+            StringBuilder msg = new StringBuilder("Record(s) ");
+            
+            for (int i = 0; i < objects.size(); i++) {
+                JSONObject object = objects.get(i);
+                msg.append(object.toJSONString());
+                
+                if (i + 1 != objects.size()) {
+                    msg.append(", ");
+                }
+            }
+            
+            msg.append(" was(were) deleted in table [")
+                    .append(tableName).append("], database [").append(dbName).append("].");
+            LOGGER.info(msg.toString(), org.slf4j.event.Level.INFO);
         } catch (FileNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RecordRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            StringBuilder msg = new StringBuilder();
+            msg.append("File [").append(tableName).append("] was not found ")
+                    .append("in database [").append(dbName).append("].");
+            LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
+            return false;
         } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(RecordRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            StringBuilder msg = new StringBuilder("Record(s) ");
+            
+            for (int i = 0; i < objects.size(); i++) {
+                JSONObject object = objects.get(i);
+                msg.append(object.toJSONString());
+                
+                if (i + 1 != objects.size()) {
+                    msg.append(", ");
+                }
+            }
+            
+            msg.append(" cant be deleted in table [").append(tableName)
+                    .append("], database [").append(dbName).append("].");
+            LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
+            return false;
         } catch (ParseException ex) {
-            java.util.logging.Logger.getLogger(RecordRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            StringBuilder msg = new StringBuilder();
+            msg.append("File [").append(tableName)
+                    .append(".txt] cant be parsed in database [")
+                    .append(dbName).append("].");
+            LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
         } finally {
             if (bufferedReader != null) {
                 try {
                     bufferedReader.close();
                     fileReader.close();
                 } catch (IOException ex) {
-                    java.util.logging.Logger.getLogger(RecordRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+                    StringBuilder msg = new StringBuilder();
+                    msg.append("File [").append(tableName)
+                            .append(".txt] cant be closed in database [")
+                            .append(dbName).append("].");
+                    LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
+                    return false;
                 }
             }
 
@@ -188,7 +240,12 @@ public class RecordRepositoryImpl implements RecordRepository {
                     bufferedWriter.close();
                     fileWriter.close();
                 } catch (IOException ex) {
-                    java.util.logging.Logger.getLogger(RecordRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+                    StringBuilder msg = new StringBuilder();
+                    msg.append("File [").append(tableName)
+                            .append(".txt] cant be closed in database [")
+                            .append(dbName).append("].");
+                    LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
+                    return false;
                 }
             }
         }

@@ -17,6 +17,7 @@ import com.netcracker.education.crudlib.utils.TableUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 /**
  *
@@ -25,20 +26,20 @@ import java.util.List;
 public class Solution {
 
     public static void main(String[] args) {
-
         DatabaseRepository databaseRepository = DatabaseRepositoryImpl.getInstance();
         TableRepository tableRepository = TableRepositoryImpl.getInstance();
         RecordRepository recordRepository = RecordRepositoryImpl.getInstance();
-
-        databaseRepository.create("test");
-/*
-        List<String> fields = new ArrayList<>();
-        fields.add("1");
-        fields.add("2");
-
-        tableRepository.create("test", "table", fields);
-
-        System.err.println(tableRepository.getByName("test", "table").toString());*/
+        
+//        ArrayList<String> list = new ArrayList<>();
+//        list.add("id");
+//        
+        TreeMap<String, String> map = new TreeMap<>();
+        map.put("id", "2");
+        
+//        databaseRepository.create("base");
+//        tableRepository.create("base", "table", list);
+        
+        recordRepository.delete("base", "table", map);
     }
 
 }
