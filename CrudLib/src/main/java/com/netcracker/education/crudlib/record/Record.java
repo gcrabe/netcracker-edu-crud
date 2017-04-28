@@ -11,7 +11,7 @@ import java.util.List;
 public class Record {
 
     List<String> fields = new ArrayList<>();
-
+    
     public Record() {
     }
 
@@ -25,5 +25,12 @@ public class Record {
 
     public void setFields(List<String> fields) {
         this.fields = fields;
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder temp = new StringBuilder("{");
+        temp.append(fields.toString()).append("}");
+        return temp.toString();
     }
 }

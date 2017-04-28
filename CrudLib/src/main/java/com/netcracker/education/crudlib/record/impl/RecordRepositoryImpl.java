@@ -4,6 +4,7 @@ import com.netcracker.education.crudlib.record.Record;
 import com.netcracker.education.crudlib.table.TableRepository;
 import com.netcracker.education.crudlib.table.impl.TableRepositoryImpl;
 import com.netcracker.education.crudlib.record.RecordRepository;
+import com.netcracker.education.crudlib.utils.RecordUtils;
 import com.netcracker.education.crudlib.utils.TableUtils;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,7 +13,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
-import jdk.nashorn.internal.parser.JSONParser;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
@@ -52,33 +51,43 @@ public class RecordRepositoryImpl implements RecordRepository {
     public boolean create(String dbName, String tableName, Map<String, String> fields) {
         String filePath = TableUtils.getFullName(dbName, tableName);
 
-        if (!TableUtils.getValidation(dbName, tableName)) {
+        if (!RecordUtils.getValidation(dbName, tableName)) {
             return false;
         }
-
+        
         File file = new File(filePath);
         FileWriter fileWriter = null;
         BufferedWriter bufferedWriter = null;
-
+        
+        String jsonString = "";
+        
         try {
             fileWriter = new FileWriter(file, true);
             bufferedWriter = new BufferedWriter(fileWriter);
-
+            
             JSONObject jsonObject = new JSONObject();
-
+            
             for (Map.Entry<String, String> entry : fields.entrySet()) {
                 String key = entry.getKey();
                 String value = entry.getValue();
-
+                
                 jsonObject.put(key, value);
             }
-
-            String jsonString = jsonObject.toJSONString();
+            
+            jsonString = jsonObject.toJSONString();
             bufferedWriter.write(jsonString);
-
+            
             bufferedWriter.newLine();
+            
+            StringBuilder msg = new StringBuilder();
+            msg.append("Record ").append(jsonString).append(" was created in table [")
+                    .append(tableName).append("], database [").append(dbName).append("].");
+            LOGGER.info(msg.toString(), org.slf4j.event.Level.INFO);
         } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(RecordRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            StringBuilder msg = new StringBuilder();
+            msg.append("Record ").append(jsonString).append(" cant be created in table [")
+                    .append(tableName).append("], database [").append(dbName).append("].");
+            LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
             return false;
         } finally {
             if (bufferedWriter != null) {
@@ -86,12 +95,16 @@ public class RecordRepositoryImpl implements RecordRepository {
                     bufferedWriter.close();
                     fileWriter.close();
                 } catch (IOException ex) {
-                    java.util.logging.Logger.getLogger(RecordRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+                    StringBuilder msg = new StringBuilder();
+                    msg.append("File [").append(tableName)
+                            .append(".txt] cant be closed in database [")
+                            .append(dbName).append("].");
+                    LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
                     return false;
                 }
             }
         }
-
+        
         return true;
     }
 
@@ -102,7 +115,7 @@ public class RecordRepositoryImpl implements RecordRepository {
         if (!TableUtils.getValidation(dbName, tableName)) {
             return false;
         }
-
+        
         File file = new File(filePath);
         FileReader fileReader = null;
         BufferedReader bufferedReader = null;
