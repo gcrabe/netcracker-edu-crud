@@ -33,6 +33,10 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
     //реализация паттерна Singleton
     private static DatabaseRepositoryImpl instance;
 
+    private final Map<String, Database> bases = new HashMap<>();
+
+    //-------Constructors and methods-------
+
     private DatabaseRepositoryImpl() {
     } //запрещаем создание объекта извне
 
@@ -40,11 +44,8 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
         if (instance == null) {
             instance = new DatabaseRepositoryImpl();
         }
-
         return instance;
     }
-
-    private final Map<String, Database> bases = new HashMap<>();
 
     //описание основных методов
     @Override
@@ -107,12 +108,13 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
         //обновляем базу
         bases.replace(database.getName(), database);
 
-
         /*есть мнение, что логирование об этой операции (а метод нужен нам для того, чтобы Макс
         спокойно мог добавить табличку в базу и поменять объект в bases), я добавлю на уровне работы с таблицами*/
- /*StringBuilder msg = new StringBuilder();
+
+        /*StringBuilder msg = new StringBuilder();
         msg.append("Database [").append().append("] successfully renamed to [").append(newDbName).append("].");
         LOGGER.info(msg.toString(), Level.INFO);*/
+
         return true;
     }
 
@@ -145,7 +147,10 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
         bases.remove(dbName);
         bases.put(newDbName, newDatabase);
 
-        //LOGGER
+        StringBuilder msg = new StringBuilder();
+        msg.append("Database [").append(dbName).append("] renamed to [").append(newDbName).append("] successfully.");
+        LOGGER.info(msg.toString(), Level.INFO);
+
         return true;
     }
 
