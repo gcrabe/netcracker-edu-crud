@@ -23,3 +23,7 @@ logfiles
 # Idea project files
 .idea
 *.iml
+
+# Testing result files
+CrudLib/CrudLib
+dbRoot

@@ -33,13 +33,15 @@ public class Solution {
 //        ArrayList<String> list = new ArrayList<>();
 //        list.add("id");
 //        
-        TreeMap<String, String> map = new TreeMap<>();
-        map.put("id", "2");
-        
+//        TreeMap<String, String> map = new TreeMap<>();
+//        map.put("id", "2");
+//        
 //        databaseRepository.create("base");
 //        tableRepository.create("base", "table", list);
         
-        recordRepository.delete("base", "table", map);
+//        recordRepository.create("base", "table", map);
+        
+        System.err.println(recordRepository.getAll("base", "table"));
     }
 
 }
