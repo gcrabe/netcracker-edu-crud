@@ -18,11 +18,13 @@ import org.slf4j.event.Level;
  *
  * @author Ya
  */
+/*Logger is correctly described for all methods in class. by ermolaxe*/
 //нужен ли, если есть getPath для Database
 public class DatabaseUtils extends Utils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseUtils.class.getName());
 
+    /*Logger is correctly described. by ermolaxe*/
     public static String getPath() {
 
         /*---------------------------------------------------------------------------
@@ -47,6 +49,10 @@ public class DatabaseUtils extends Utils {
                 StringBuilder msg = new StringBuilder();
                 msg.append("Root directory created with path [").append(dbRoot).append("].");
                 LOGGER.info(msg.toString(), Level.INFO);
+            } else {
+                StringBuilder msg = new StringBuilder();
+                msg.append("Root directory can't be created with path [").append(dbRoot).append("].");
+                LOGGER.error(msg.toString(), Level.ERROR);
             }
 
         } catch (IOException e) {
@@ -55,6 +61,7 @@ public class DatabaseUtils extends Utils {
         return dbRoot;
     }
 
+    /*Logger is correctly described. by ermolaxe*/
     public static boolean createDatabaseRepository(String dbName) {
 
         if (!DatabaseUtils.nameValidation(dbName)) {
@@ -73,7 +80,7 @@ public class DatabaseUtils extends Utils {
         if (!creatingTemp) {
 
             StringBuilder msg = new StringBuilder();
-            msg.append("Database [").append(dbName).append("] cant be created.");
+            msg.append("Database directory [").append(dbName).append("] can't be created.");
             LOGGER.error(msg.toString(), Level.ERROR);
 
             return false;
@@ -82,6 +89,7 @@ public class DatabaseUtils extends Utils {
         return true;
     }
 
+    /*Logger is correctly described. by ermolaxe*/
     public static boolean deleteDatabaseRepository(String dbName) {
 
         if (!DatabaseUtils.nameValidation(dbName)) {

@@ -32,6 +32,8 @@ public class TableRepositoryImpl implements TableRepository {
 
     private static TableRepositoryImpl instance;
 
+    //-------Methods and constructors-------
+
     private TableRepositoryImpl() {
     }
 

@@ -26,6 +26,7 @@ import static com.netcracker.education.crudlib.utils.DatabaseUtils.getPath;
  *
  * @author Ya
  */
+/*Logger is correctly described for all methods in class. by ermolaxe*/
 public class DatabaseRepositoryImpl implements DatabaseRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseRepositoryImpl.class.getName());
@@ -48,6 +49,8 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
     }
 
     //описание основных методов
+
+    /*Logger is correctly described. by ermolaxe*/
     @Override
     public boolean create(String dbName) {
 
@@ -61,8 +64,14 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
         File tableStore = new File(dbName + "TableStore.txt");
         try {
             tableStore.createNewFile();
+
+            StringBuilder msg = new StringBuilder();
+            msg.append("Configuration file for database [").append(dbName).append("] created successfully.");
+            LOGGER.info(msg.toString(), Level.INFO);
         } catch (IOException e) {
-            //LOGGER
+            StringBuilder msg = new StringBuilder();
+            msg.append("Can't create configuration file for database [").append(dbName).append("] with exception [").append(e.getMessage()).append("].");
+            LOGGER.error(msg.toString(), Level.ERROR);
         }
 
         //создаем элемент в мапе
@@ -70,12 +79,13 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
         bases.put(dbName, tempDatabase);
 
         StringBuilder msg = new StringBuilder();
-        msg.append("Database directory [").append(dbName).append("] created.");
+        msg.append("Database directory [").append(dbName).append("] created successfully.");
         LOGGER.info(msg.toString(), Level.INFO);
 
         return true;
     }
 
+    /*Logger is correctly described. by ermolaxe*/
     @Override
     public boolean delete(String dbName) {
 
@@ -101,6 +111,11 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
         //проверка наличия файла
         File databaseDir = new File(database.getPath());
         if (!databaseDir.exists()) {
+
+            StringBuilder msg = new StringBuilder();
+            msg.append("Database with path [").append(databaseDir.getPath()).append("] isn't exist.");
+            LOGGER.error(msg.toString(), Level.ERROR);
+
             return false;
         }
 
@@ -110,13 +125,10 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
         /*есть мнение, что логирование об этой операции (а метод нужен нам для того, чтобы Макс
         спокойно мог добавить табличку в базу и поменять объект в bases), я добавлю на уровне работы с таблицами*/
 
-        /*StringBuilder msg = new StringBuilder();
-        msg.append("Database [").append().append("] successfully renamed to [").append(newDbName).append("].");
-        LOGGER.info(msg.toString(), Level.INFO);*/
-
         return true;
     }
 
+    /*Logger is correctly described. by ermolaxe*/
     @Override
     public boolean rename(String dbName, String newDbName) {
 
@@ -153,15 +165,16 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
         return true;
     }
 
+    /*Logger is correctly described. by ermolaxe*/
     @Override
     public Database getByName(String dbName) {
 
         Database database = bases.get(dbName);
 
         if(database.equals(null)){
-            //Logger
-        }else{
-            //Logger
+            StringBuilder msg = new StringBuilder();
+            msg.append("Method get from bases map return null for request with name [").append(dbName).append("].");
+            LOGGER.error(msg.toString(), Level.ERROR );
         }
 
         StringBuilder msg = new StringBuilder();
@@ -171,6 +184,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
         return database;
     }
 
+    /*Logger is correctly described. by ermolaxe*/
     @Override
     public Set<String> getAllNames() {
 

@@ -20,13 +20,15 @@ import org.slf4j.event.Level;
  *
  * @author Ya
  */
+/*Logger is correctly described for all methods in class. by ermolaxe*/
 public class Database {
+    public static final Logger LOGGER = LoggerFactory.getLogger(Database.class.getName());
 
     private String name;
     private String path;
     private Map<String, Table> tables = new HashMap<>(); // tableName, table
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(Database.class.getName());
+    //-------Methods and constructions-------
 
     public Database(String name) {
         //нет оповещения о некорректном пути
@@ -40,10 +42,12 @@ public class Database {
         }
     }
 
+    /*Logger is correctly described. by ermolaxe*/
     public String getName() {
         return name;
     }
 
+    /*Logger is correctly described. by ermolaxe*/
     public boolean setName(String name) {
 
         //проверяем корректность имени
