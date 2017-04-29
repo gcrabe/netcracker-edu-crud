@@ -337,7 +337,7 @@ public class RecordRepositoryImpl implements RecordRepository {
                 }
             }
             
-            msg.append(" cant be deleted in table [").append(tableName)
+            msg.append(" cant be taken from table [").append(tableName)
                     .append("], database [").append(dbName).append("].");
             LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
             return null;
@@ -371,79 +371,114 @@ public class RecordRepositoryImpl implements RecordRepository {
     public List<Record> getByFields(String dbName, String tableName, Map<String, String> fields) {
         String filePath = TableUtils.getFullName(dbName, tableName);
 
-        if (!TableUtils.getValidation(dbName, tableName)) {
+        if (!RecordUtils.getValidation(dbName, tableName)) {
+            StringBuilder msg = new StringBuilder();
+            msg.append("Invalid characters in path [").append(dbName)
+                    .append("/").append(tableName).append("].");
+            LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
             return null;
         }
-
+        
         File file = new File(filePath);
         FileReader fileReader = null;
         BufferedReader bufferedReader = null;
-
+        
         List<Record> records = new ArrayList<>();
-
+        ArrayList<JSONObject> objects = null;
+        
         try {
             fileReader = new FileReader(file);
             bufferedReader = new BufferedReader(fileReader);
-
+            
             ArrayList<String> lines = new ArrayList<>();
             String tempLine = null;
-
+            
             while ((tempLine = bufferedReader.readLine()) != null) {
                 if (tempLine.trim().isEmpty()) {
                     continue;
                 }
-
-                boolean isCorrect = true;
-
+                
                 for (Map.Entry<String, String> entry : fields.entrySet()) {
                     String pattern = '\"' + entry.getKey() + "\":\"" + entry.getValue() + '\"';
-
+                    
                     if (tempLine.contains(pattern)) {
-                        isCorrect = false;
+                        lines.add(tempLine);
                     }
                 }
-
-                if (isCorrect) {
-                    lines.add(tempLine);
-                }
             }
-
-            ArrayList<JSONObject> objects = new ArrayList<>();
-
+            
+            objects = new ArrayList<>();
+            
             for (String line : lines) {
                 JSONObject object = (JSONObject) JSONValue.parseWithException(line);
                 objects.add(object);
             }
-
+            
             for (JSONObject object : objects) {
                 Set<Map.Entry<String, String>> entrySet = object.entrySet();
                 ArrayList<String> tempList = new ArrayList<>();
                 Record record = null;
-
+                
                 for (Map.Entry<String, String> entry : entrySet) {
                     tempList.add(entry.getValue());
                 }
-
+                
                 record = new Record(tempList);
                 records.add(record);
             }
+            
+            StringBuilder msg = new StringBuilder("Record(s) ");
+            
+            msg.append(records.toString());
+            msg.append(" was(were) taken from table [")
+                    .append(tableName).append("], database [").append(dbName).append("].");
+            LOGGER.info(msg.toString(), org.slf4j.event.Level.INFO);
         } catch (FileNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RecordRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            StringBuilder msg = new StringBuilder();
+            msg.append("File [").append(tableName).append("] was not found ")
+                    .append("in database [").append(dbName).append("].");
+            LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
+            return null;
         } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(RecordRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            StringBuilder msg = new StringBuilder("Record(s) ");
+            
+            for (int i = 0; i < objects.size(); i++) {
+                JSONObject object = objects.get(i);
+                msg.append(object.toJSONString());
+                
+                if (i + 1 != objects.size()) {
+                    msg.append(", ");
+                }
+            }
+            
+            msg.append(" cant be taken from table [").append(tableName)
+                    .append("], database [").append(dbName).append("].");
+            LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
+            return null;
         } catch (ParseException ex) {
-            java.util.logging.Logger.getLogger(RecordRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            StringBuilder msg = new StringBuilder();
+            msg.append("File [").append(tableName)
+                    .append(".txt] cant be parsed in database [")
+                    .append(dbName).append("].");
+            LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
+            return null;
         } finally {
             if (bufferedReader != null) {
                 try {
                     bufferedReader.close();
                     fileReader.close();
                 } catch (IOException ex) {
-                    java.util.logging.Logger.getLogger(RecordRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+                    StringBuilder msg = new StringBuilder();
+                    msg.append("File [").append(tableName)
+                            .append(".txt] cant be closed in database [")
+                            .append(dbName).append("].");
+                    LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
+                    return null;
                 }
             }
         }
-        return records;//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        
+        return records;
     }
 
 }
