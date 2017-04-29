@@ -255,8 +255,157 @@ public class RecordRepositoryImpl implements RecordRepository {
     }
 
     @Override
-    public boolean update(String dbName, String tableName, Map<String, String> fields) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean update(String dbName, String tableName, Map<String, String> fields,
+            String newKey, String newValue) {
+        String filePath = TableUtils.getFullName(dbName, tableName);
+
+        if (!RecordUtils.getValidation(dbName, tableName)) {
+            StringBuilder msg = new StringBuilder();
+            msg.append("Invalid characters in path [").append(dbName)
+                    .append("/").append(tableName).append("].");
+            LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
+            return false;
+        }
+        
+        File file = new File(filePath);
+        FileReader fileReader = null;
+        BufferedReader bufferedReader = null;
+
+        FileWriter fileWriter = null;
+        BufferedWriter bufferedWriter = null;
+        
+        ArrayList<JSONObject> objects = null;
+        
+        try {
+            fileReader = new FileReader(file);
+            bufferedReader = new BufferedReader(fileReader);
+            
+            ArrayList<String> lines = new ArrayList<>();
+            String tempLine = null;
+            
+            while ((tempLine = bufferedReader.readLine()) != null) {
+                if (tempLine.trim().isEmpty()) {
+                    continue;
+                }
+                
+                for (Map.Entry<String, String> entry : fields.entrySet()) {
+                    String pattern = '\"' + entry.getKey() + "\":\"" + entry.getValue() + '\"';
+                    
+                    if (tempLine.contains(pattern)) {
+                        JSONObject object = (JSONObject) JSONValue.parseWithException(tempLine);
+                        Object previousKey = object.replace(newKey, newValue);
+                        
+                        if (previousKey == null) {
+                            StringBuilder msg = new StringBuilder();
+                            msg.append("Record [").append(object.toJSONString())
+                                    .append("] cant be updated in table [")
+                                    .append(tableName).append("], database [")
+                                    .append(dbName).append("]: ")
+                                    .append("Incorrect types.");
+                            return false;
+                        }
+                        
+                        tempLine = object.toJSONString();
+                        lines.add(tempLine);
+                        break;
+                    }
+                    
+                    lines.add(tempLine);
+                }
+            }
+            
+            objects = new ArrayList<>();
+            
+            for (String line : lines) {
+                JSONObject object = (JSONObject) JSONValue.parseWithException(line);
+                objects.add(object);
+            }
+            
+            fileWriter = new FileWriter(file);
+            bufferedWriter = new BufferedWriter(fileWriter);
+            
+            fileWriter.write("");
+            
+            for (JSONObject object : objects) {
+                String jsonString = object.toJSONString();
+                bufferedWriter.write(jsonString);
+                bufferedWriter.newLine();
+            }
+            
+            StringBuilder msg = new StringBuilder("Record(s) ");
+            
+            for (int i = 0; i < objects.size(); i++) {
+                JSONObject object = objects.get(i);
+                msg.append(object.toJSONString());
+                
+                if (i + 1 != objects.size()) {
+                    msg.append(", ");
+                }
+            }
+            
+            msg.append(" was(were) updated in table [")
+                    .append(tableName).append("], database [").append(dbName).append("].");
+            LOGGER.info(msg.toString(), org.slf4j.event.Level.INFO);
+        } catch (FileNotFoundException ex) {
+            StringBuilder msg = new StringBuilder();
+            msg.append("File [").append(tableName).append("] was not found ")
+                    .append("in database [").append(dbName).append("].");
+            LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
+            return false;
+        } catch (IOException ex) {
+            StringBuilder msg = new StringBuilder("Record(s) ");
+            
+            for (int i = 0; i < objects.size(); i++) {
+                JSONObject object = objects.get(i);
+                msg.append(object.toJSONString());
+                
+                if (i + 1 != objects.size()) {
+                    msg.append(", ");
+                }
+            }
+            
+            msg.append(" cant be updated in table [").append(tableName)
+                    .append("], database [").append(dbName).append("].");
+            LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
+            return false;
+        } catch (ParseException ex) {
+            StringBuilder msg = new StringBuilder();
+            msg.append("File [").append(tableName)
+                    .append(".txt] cant be parsed in database [")
+                    .append(dbName).append("].");
+            LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
+            return false;
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                    fileReader.close();
+                } catch (IOException ex) {
+                    StringBuilder msg = new StringBuilder();
+                    msg.append("File [").append(tableName)
+                            .append(".txt] cant be closed in database [")
+                            .append(dbName).append("].");
+                    LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
+                    return false;
+                }
+            }
+
+            if (bufferedWriter != null) {
+                try {
+                    bufferedWriter.close();
+                    fileWriter.close();
+                } catch (IOException ex) {
+                    StringBuilder msg = new StringBuilder();
+                    msg.append("File [").append(tableName)
+                            .append(".txt] cant be closed in database [")
+                            .append(dbName).append("].");
+                    LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
+                    return false;
+                }
+            }
+        }
+        
+        return true;
     }
 
     @Override
@@ -270,7 +419,7 @@ public class RecordRepositoryImpl implements RecordRepository {
             LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
             return null;
         }
-
+        
         File file = new File(filePath);
         FileReader fileReader = null;
         BufferedReader bufferedReader = null;
@@ -403,6 +552,7 @@ public class RecordRepositoryImpl implements RecordRepository {
                     
                     if (tempLine.contains(pattern)) {
                         lines.add(tempLine);
+                        break;
                     }
                 }
             }

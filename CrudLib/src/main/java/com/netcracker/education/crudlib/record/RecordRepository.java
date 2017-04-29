@@ -14,7 +14,8 @@ public interface RecordRepository {
     
     public boolean delete(String dbName, String tableName, Map<String, String> fields);
     
-    public boolean update(String dbName, String tableName, Map<String, String> fields);
+    public boolean update(String dbName, String tableName, Map<String, String> fields, 
+            String newKey, String newValue);
     
     public List<Record> getAll(String dbName, String tableName);
     
