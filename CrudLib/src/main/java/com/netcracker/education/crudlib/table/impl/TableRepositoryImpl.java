@@ -140,7 +140,7 @@ public class TableRepositoryImpl implements TableRepository {
     }
 
     @Override
-    public boolean update(String dbName, String tableName, String newTableName) {
+    public boolean rename(String dbName, String tableName, String newTableName) {
         File file = null;
         String fullName;
 

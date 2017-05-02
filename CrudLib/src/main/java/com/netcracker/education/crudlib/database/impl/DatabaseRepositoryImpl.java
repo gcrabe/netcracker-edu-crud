@@ -11,11 +11,13 @@ import com.netcracker.education.crudlib.table.Table;
 import com.netcracker.education.crudlib.utils.DatabaseUtils;
 import java.io.File;
 
+import com.netcracker.education.crudlib.utils.TableUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -61,7 +63,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
         }
 
         //создаем файл конфигураций
-        File tableStore = new File(dbName + "TableStore.txt");
+        File tableStore = new File(DatabaseUtils.getPath() + dbName + '/' + dbName + "TableStore.txt");
         try {
             tableStore.createNewFile();
 
@@ -217,13 +219,11 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
     private static Map<String, Table> getExistTables(Database database) {
 
         Map<String, Table> tables = new HashMap();
-        File databaseFile = new File(DatabaseUtils.getPath() + database.getName());
-        File[] tableFiles = databaseFile.listFiles();
+        File databaseStoreFile = new File(DatabaseUtils.getPath() + database.getName()+ '/' + database.getName() + "TableStore.txt");
 
-        for (int i = 0; i < tableFiles.length; i++) {
+        ArrayList<Table> tablesList = (ArrayList<Table>) TableUtils.readTablesFromStorage(database);
 
-            tables.put(tableFiles[i].getName(), new Table(tableFiles[i].getName(), null));
-        }
+        // push to map
 
         return tables;
     }

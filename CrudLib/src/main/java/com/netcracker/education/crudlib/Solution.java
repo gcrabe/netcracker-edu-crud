@@ -29,6 +29,9 @@ public class Solution {
         DatabaseRepository databaseRepository = DatabaseRepositoryImpl.getInstance();
         TableRepository tableRepository = TableRepositoryImpl.getInstance();
         RecordRepository recordRepository = RecordRepositoryImpl.getInstance();
+
+        databaseRepository.create("test");
+        databaseRepository.create("maks");
         
 //        ArrayList<String> list = new ArrayList<>();
 //        list.add("id");
@@ -41,7 +44,7 @@ public class Solution {
         
 //        recordRepository.create("base", "table", map);
         
-        System.err.println(recordRepository.getAll("base", "table"));
+//        System.err.println(recordRepository.getAll("base", "table"));
     }
 
 }

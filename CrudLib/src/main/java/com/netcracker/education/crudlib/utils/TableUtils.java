@@ -8,6 +8,8 @@ import com.netcracker.education.crudlib.table.impl.TableRepositoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 /**
  *
  * @author gc
@@ -39,5 +41,13 @@ public class TableUtils extends Utils {
         String dbPath = database.getPath();
 
         System.err.println(dbPath);
+    }
+
+    public static boolean writeTableToStorage(String dbName, Table table) {
+        return true;
+    }
+
+    public static List<Table> readTablesFromStorage(Database database) {
+        return null;
     }
 }

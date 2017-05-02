@@ -19,7 +19,7 @@ public interface TableRepository {
 
     public boolean delete(String dbName, String tableName);
 
-    public boolean update(String dbName, String tableName, String newTableName);
+    public boolean rename(String dbName, String tableName, String newTableName);
 
     public Table getByName(String dbName, String tableName);
 
