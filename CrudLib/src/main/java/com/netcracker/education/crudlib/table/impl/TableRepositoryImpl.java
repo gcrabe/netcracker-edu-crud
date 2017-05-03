@@ -65,7 +65,7 @@ public class TableRepositoryImpl implements TableRepository {
                 dbEx.putTable(tableName, table);
                 databaseRepositoryImplInstance.update(dbEx);//возврат объекта на место
 
-                TableUtils.writeToTableStore(dbName, table);
+                TableUtils.writeToTableStorage(dbName, table);
 
                 StringBuilder msg = new StringBuilder();
                 msg.append("Table [").append(tableName).append("] in database [").append(dbName).append("] created successfully.");

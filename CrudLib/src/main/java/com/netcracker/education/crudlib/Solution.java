@@ -31,7 +31,11 @@ public class Solution {
         RecordRepository recordRepository = RecordRepositoryImpl.getInstance();
 
         databaseRepository.create("test");
-        databaseRepository.create("maks");
+
+        List<String> list = new ArrayList<>();
+        list.add("first_name");
+        list.add("last_name");
+        tableRepository.create("test", "table", list);
         
 //        ArrayList<String> list = new ArrayList<>();
 //        list.add("id");
