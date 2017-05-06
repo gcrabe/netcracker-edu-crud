@@ -108,8 +108,6 @@ public class TableUtils extends Utils {
             fileReader = new FileReader(file);
             bufferedReader= new BufferedReader(fileReader);
 
-            JSONObject jsonObject = new JSONObject();
-
             ArrayList<String> lines = new ArrayList<>();
             String tempLine = null;
 
@@ -161,9 +159,8 @@ public class TableUtils extends Utils {
                     fileReader.close();
                 } catch (IOException ex) {
                     StringBuilder msg = new StringBuilder();
-                    msg.append("Tables [").append(tables.toString())
-                            .append("] cant be desserialized from [")
-                            .append(storagePath).append("].");
+                    msg.append("Storage [").append(storagePath)
+                            .append("] cant be closed.");
                     LOGGER.error(msg.toString(), Level.ERROR);
                     return null;
                 }

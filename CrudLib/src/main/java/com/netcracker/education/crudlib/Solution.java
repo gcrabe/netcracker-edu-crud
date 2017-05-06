@@ -5,6 +5,7 @@
  */
 package com.netcracker.education.crudlib;
 
+import com.netcracker.education.crudlib.database.Database;
 import com.netcracker.education.crudlib.database.DatabaseRepository;
 import com.netcracker.education.crudlib.database.impl.DatabaseRepositoryImpl;
 import com.netcracker.education.crudlib.record.RecordRepository;
@@ -30,25 +31,22 @@ public class Solution {
         TableRepository tableRepository = TableRepositoryImpl.getInstance();
         RecordRepository recordRepository = RecordRepositoryImpl.getInstance();
 
-        databaseRepository.create("test");
-
-        List<String> list = new ArrayList<>();
-        list.add("first_name");
-        list.add("last_name");
-        tableRepository.create("test", "table", list);
-        
-//        ArrayList<String> list = new ArrayList<>();
-//        list.add("id");
-//        
-//        TreeMap<String, String> map = new TreeMap<>();
-//        map.put("id", "2");
-//        
 //        databaseRepository.create("base");
-//        tableRepository.create("base", "table", list);
-        
+//
+//        List<String> fieldList = new ArrayList<>();
+//        fieldList.add("first_name");
+//        fieldList.add("last_name");
+//
+//        tableRepository.create("base", "table", fieldList);
+//
+//        TreeMap<String, String> map = new TreeMap<>();
+//        map.put("first_name", "1");
+//        map.put("last_name", "2");
+//
 //        recordRepository.create("base", "table", map);
-        
-//        System.err.println(recordRepository.getAll("base", "table"));
+
+        Database db = databaseRepository.getByName("base");
+        System.out.println(databaseRepository.);
     }
 
 }
