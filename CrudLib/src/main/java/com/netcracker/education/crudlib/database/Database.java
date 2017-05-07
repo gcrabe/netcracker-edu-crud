@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.netcracker.education.crudlib.database;
 
 import com.netcracker.education.crudlib.utils.DatabaseUtils;
@@ -22,6 +17,7 @@ import org.slf4j.event.Level;
  */
 /*Logger is correctly described for all methods in class. by ermolaxe*/
 public class Database {
+
     public static final Logger LOGGER = LoggerFactory.getLogger(Database.class.getName());
 
     private String name;
@@ -29,7 +25,6 @@ public class Database {
     private Map<String, Table> tables = new HashMap<>(); // tableName, table
 
     //-------Methods and constructions-------
-
     public Database(String name) {
         //нет оповещения о некорректном пути
         if (!DatabaseUtils.nameValidation(name)) {
@@ -49,7 +44,6 @@ public class Database {
 
     /*Logger is correctly described. by ermolaxe*/
     public boolean setName(String name) {
-
         //проверяем корректность имени
         if (!DatabaseUtils.nameValidation(name)) {
 
@@ -106,5 +100,17 @@ public class Database {
 
     public void setTables(Map<String, Table> tables) {
         this.tables = tables;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder res = new StringBuilder("{" + this.getName() + ", ");
+
+        for (Map.Entry<String, Table> table : tables.entrySet()) {
+            res.append("[").append(table.getKey()).append(":")
+                    .append(table.getValue().toString()).append("]}");
+        }
+
+        return res.toString();
     }
 }

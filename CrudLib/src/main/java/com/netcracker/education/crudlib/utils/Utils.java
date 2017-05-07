@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.netcracker.education.crudlib.utils;
 
 import java.util.regex.Matcher;
@@ -15,7 +10,6 @@ import java.util.regex.Pattern;
 public class Utils {
 
     public static boolean nameValidation(String name) {
-
         Pattern pattern = Pattern.compile("(.+)?[><\\|\\?*/:\\\\\"](.+)?");
         Matcher matcher = pattern.matcher(name);
 

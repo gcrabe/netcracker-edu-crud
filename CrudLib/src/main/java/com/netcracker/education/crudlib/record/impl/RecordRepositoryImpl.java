@@ -6,6 +6,7 @@ import com.netcracker.education.crudlib.table.impl.TableRepositoryImpl;
 import com.netcracker.education.crudlib.record.RecordRepository;
 import com.netcracker.education.crudlib.utils.RecordUtils;
 import com.netcracker.education.crudlib.utils.TableUtils;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,12 +15,13 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
@@ -58,31 +60,31 @@ public class RecordRepositoryImpl implements RecordRepository {
             LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
             return false;
         }
-        
+
         File file = new File(filePath);
         FileWriter fileWriter = null;
         BufferedWriter bufferedWriter = null;
-        
+
         String jsonString = "";
-        
+
         try {
             fileWriter = new FileWriter(file, true);
             bufferedWriter = new BufferedWriter(fileWriter);
-            
+
             JSONObject jsonObject = new JSONObject();
-            
+
             for (Map.Entry<String, String> entry : fields.entrySet()) {
                 String key = entry.getKey();
                 String value = entry.getValue();
-                
+
                 jsonObject.put(key, value);
             }
-            
+
             jsonString = jsonObject.toJSONString();
             bufferedWriter.write(jsonString);
-            
+
             bufferedWriter.newLine();
-            
+
             StringBuilder msg = new StringBuilder();
             msg.append("Record ").append(jsonString).append(" was created in table [")
                     .append(tableName).append("], database [").append(dbName).append("].");
@@ -108,7 +110,7 @@ public class RecordRepositoryImpl implements RecordRepository {
                 }
             }
         }
-        
+
         return true;
     }
 
@@ -123,16 +125,16 @@ public class RecordRepositoryImpl implements RecordRepository {
             LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
             return false;
         }
-        
+
         File file = new File(filePath);
         FileReader fileReader = null;
         BufferedReader bufferedReader = null;
 
         FileWriter fileWriter = null;
         BufferedWriter bufferedWriter = null;
-        
+
         ArrayList<JSONObject> objects = null;
-        
+
         try {
             fileReader = new FileReader(file);
             bufferedReader = new BufferedReader(fileReader);
@@ -171,24 +173,24 @@ public class RecordRepositoryImpl implements RecordRepository {
             bufferedWriter = new BufferedWriter(fileWriter);
 
             fileWriter.write("");
-            
+
             for (JSONObject object : objects) {
                 String jsonString = object.toJSONString();
                 bufferedWriter.write(jsonString);
                 bufferedWriter.newLine();
             }
-            
+
             StringBuilder msg = new StringBuilder("Record(s) ");
-            
+
             for (int i = 0; i < objects.size(); i++) {
                 JSONObject object = objects.get(i);
                 msg.append(object.toJSONString());
-                
+
                 if (i + 1 != objects.size()) {
                     msg.append(", ");
                 }
             }
-            
+
             msg.append(" was(were) deleted in table [")
                     .append(tableName).append("], database [").append(dbName).append("].");
             LOGGER.info(msg.toString(), org.slf4j.event.Level.INFO);
@@ -200,16 +202,16 @@ public class RecordRepositoryImpl implements RecordRepository {
             return false;
         } catch (IOException ex) {
             StringBuilder msg = new StringBuilder("Record(s) ");
-            
+
             for (int i = 0; i < objects.size(); i++) {
                 JSONObject object = objects.get(i);
                 msg.append(object.toJSONString());
-                
+
                 if (i + 1 != objects.size()) {
                     msg.append(", ");
                 }
             }
-            
+
             msg.append(" cant be deleted in table [").append(tableName)
                     .append("], database [").append(dbName).append("].");
             LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
@@ -266,35 +268,35 @@ public class RecordRepositoryImpl implements RecordRepository {
             LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
             return false;
         }
-        
+
         File file = new File(filePath);
         FileReader fileReader = null;
         BufferedReader bufferedReader = null;
 
         FileWriter fileWriter = null;
         BufferedWriter bufferedWriter = null;
-        
+
         ArrayList<JSONObject> objects = null;
-        
+
         try {
             fileReader = new FileReader(file);
             bufferedReader = new BufferedReader(fileReader);
-            
+
             ArrayList<String> lines = new ArrayList<>();
             String tempLine = null;
-            
+
             while ((tempLine = bufferedReader.readLine()) != null) {
                 if (tempLine.trim().isEmpty()) {
                     continue;
                 }
-                
+
                 for (Map.Entry<String, String> entry : fields.entrySet()) {
                     String pattern = '\"' + entry.getKey() + "\":\"" + entry.getValue() + '\"';
-                    
+
                     if (tempLine.contains(pattern)) {
                         JSONObject object = (JSONObject) JSONValue.parseWithException(tempLine);
                         Object previousKey = object.replace(newKey, newValue);
-                        
+
                         if (previousKey == null) {
                             StringBuilder msg = new StringBuilder();
                             msg.append("Record [").append(object.toJSONString())
@@ -304,45 +306,45 @@ public class RecordRepositoryImpl implements RecordRepository {
                                     .append("Incorrect types.");
                             return false;
                         }
-                        
+
                         tempLine = object.toJSONString();
                         lines.add(tempLine);
                         break;
                     }
-                    
+
                     lines.add(tempLine);
                 }
             }
-            
+
             objects = new ArrayList<>();
-            
+
             for (String line : lines) {
                 JSONObject object = (JSONObject) JSONValue.parseWithException(line);
                 objects.add(object);
             }
-            
+
             fileWriter = new FileWriter(file);
             bufferedWriter = new BufferedWriter(fileWriter);
-            
+
             fileWriter.write("");
-            
+
             for (JSONObject object : objects) {
                 String jsonString = object.toJSONString();
                 bufferedWriter.write(jsonString);
                 bufferedWriter.newLine();
             }
-            
+
             StringBuilder msg = new StringBuilder("Record(s) ");
-            
+
             for (int i = 0; i < objects.size(); i++) {
                 JSONObject object = objects.get(i);
                 msg.append(object.toJSONString());
-                
+
                 if (i + 1 != objects.size()) {
                     msg.append(", ");
                 }
             }
-            
+
             msg.append(" was(were) updated in table [")
                     .append(tableName).append("], database [").append(dbName).append("].");
             LOGGER.info(msg.toString(), org.slf4j.event.Level.INFO);
@@ -354,16 +356,16 @@ public class RecordRepositoryImpl implements RecordRepository {
             return false;
         } catch (IOException ex) {
             StringBuilder msg = new StringBuilder("Record(s) ");
-            
+
             for (int i = 0; i < objects.size(); i++) {
                 JSONObject object = objects.get(i);
                 msg.append(object.toJSONString());
-                
+
                 if (i + 1 != objects.size()) {
                     msg.append(", ");
                 }
             }
-            
+
             msg.append(" cant be updated in table [").append(tableName)
                     .append("], database [").append(dbName).append("].");
             LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
@@ -404,7 +406,7 @@ public class RecordRepositoryImpl implements RecordRepository {
                 }
             }
         }
-        
+
         return true;
     }
 
@@ -419,7 +421,7 @@ public class RecordRepositoryImpl implements RecordRepository {
             LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
             return null;
         }
-        
+
         File file = new File(filePath);
         FileReader fileReader = null;
         BufferedReader bufferedReader = null;
@@ -461,9 +463,9 @@ public class RecordRepositoryImpl implements RecordRepository {
                 record = new Record(tempList);
                 records.add(record);
             }
-            
+
             StringBuilder msg = new StringBuilder("Record(s) ");
-            
+
             msg.append(records.toString());
             msg.append(" was(were) taken from table [")
                     .append(tableName).append("], database [").append(dbName).append("].");
@@ -476,16 +478,16 @@ public class RecordRepositoryImpl implements RecordRepository {
             return null;
         } catch (IOException ex) {
             StringBuilder msg = new StringBuilder("Record(s) ");
-            
+
             for (int i = 0; i < objects.size(); i++) {
                 JSONObject object = objects.get(i);
                 msg.append(object.toJSONString());
-                
+
                 if (i + 1 != objects.size()) {
                     msg.append(", ");
                 }
             }
-            
+
             msg.append(" cant be taken from table [").append(tableName)
                     .append("], database [").append(dbName).append("].");
             LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
@@ -515,7 +517,7 @@ public class RecordRepositoryImpl implements RecordRepository {
 
         return records;
     }
-    
+
     @Override
     public List<Record> getByFields(String dbName, String tableName, Map<String, String> fields) {
         String filePath = TableUtils.getFullName(dbName, tableName);
@@ -527,58 +529,58 @@ public class RecordRepositoryImpl implements RecordRepository {
             LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
             return null;
         }
-        
+
         File file = new File(filePath);
         FileReader fileReader = null;
         BufferedReader bufferedReader = null;
-        
+
         List<Record> records = new ArrayList<>();
         ArrayList<JSONObject> objects = null;
-        
+
         try {
             fileReader = new FileReader(file);
             bufferedReader = new BufferedReader(fileReader);
-            
+
             ArrayList<String> lines = new ArrayList<>();
             String tempLine = null;
-            
+
             while ((tempLine = bufferedReader.readLine()) != null) {
                 if (tempLine.trim().isEmpty()) {
                     continue;
                 }
-                
+
                 for (Map.Entry<String, String> entry : fields.entrySet()) {
                     String pattern = '\"' + entry.getKey() + "\":\"" + entry.getValue() + '\"';
-                    
+
                     if (tempLine.contains(pattern)) {
                         lines.add(tempLine);
                         break;
                     }
                 }
             }
-            
+
             objects = new ArrayList<>();
-            
+
             for (String line : lines) {
                 JSONObject object = (JSONObject) JSONValue.parseWithException(line);
                 objects.add(object);
             }
-            
+
             for (JSONObject object : objects) {
                 Set<Map.Entry<String, String>> entrySet = object.entrySet();
                 ArrayList<String> tempList = new ArrayList<>();
                 Record record = null;
-                
+
                 for (Map.Entry<String, String> entry : entrySet) {
                     tempList.add(entry.getValue());
                 }
-                
+
                 record = new Record(tempList);
                 records.add(record);
             }
-            
+
             StringBuilder msg = new StringBuilder("Record(s) ");
-            
+
             msg.append(records.toString());
             msg.append(" was(were) taken from table [")
                     .append(tableName).append("], database [").append(dbName).append("].");
@@ -591,16 +593,16 @@ public class RecordRepositoryImpl implements RecordRepository {
             return null;
         } catch (IOException ex) {
             StringBuilder msg = new StringBuilder("Record(s) ");
-            
+
             for (int i = 0; i < objects.size(); i++) {
                 JSONObject object = objects.get(i);
                 msg.append(object.toJSONString());
-                
+
                 if (i + 1 != objects.size()) {
                     msg.append(", ");
                 }
             }
-            
+
             msg.append(" cant be taken from table [").append(tableName)
                     .append("], database [").append(dbName).append("].");
             LOGGER.error(msg.toString(), org.slf4j.event.Level.ERROR);
@@ -627,7 +629,7 @@ public class RecordRepositoryImpl implements RecordRepository {
                 }
             }
         }
-        
+
         return records;
     }
 

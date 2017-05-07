@@ -2,7 +2,6 @@ package com.netcracker.education.crudlib.utils;
 
 import com.netcracker.education.crudlib.database.Database;
 import com.netcracker.education.crudlib.database.impl.DatabaseRepositoryImpl;
-import com.netcracker.education.crudlib.record.Record;
 import com.netcracker.education.crudlib.table.Table;
 import com.netcracker.education.crudlib.table.impl.TableRepositoryImpl;
 
@@ -16,8 +15,6 @@ import org.slf4j.event.Level;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  *
@@ -106,7 +103,7 @@ public class TableUtils extends Utils {
 
         try {
             fileReader = new FileReader(file);
-            bufferedReader= new BufferedReader(fileReader);
+            bufferedReader = new BufferedReader(fileReader);
 
             ArrayList<String> lines = new ArrayList<>();
             String tempLine = null;
@@ -153,7 +150,7 @@ public class TableUtils extends Utils {
             LOGGER.error(msg.toString(), Level.ERROR);
             return null;
         } finally {
-            if (bufferedReader!= null) {
+            if (bufferedReader != null) {
                 try {
                     bufferedReader.close();
                     fileReader.close();

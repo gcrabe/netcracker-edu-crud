@@ -1,12 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.netcracker.education.crudlib.table.impl;
 
 import com.netcracker.education.crudlib.database.Database;
-import com.netcracker.education.crudlib.database.DatabaseRepository;
 import com.netcracker.education.crudlib.database.impl.DatabaseRepositoryImpl;
 import com.netcracker.education.crudlib.table.Table;
 import com.netcracker.education.crudlib.table.TableRepository;
@@ -33,7 +27,6 @@ public class TableRepositoryImpl implements TableRepository {
     private static TableRepositoryImpl instance;
 
     //-------Methods and constructors-------
-
     private TableRepositoryImpl() {
     }
 

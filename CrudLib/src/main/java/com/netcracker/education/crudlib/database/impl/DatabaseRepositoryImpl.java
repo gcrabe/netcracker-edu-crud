@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.netcracker.education.crudlib.database.impl;
 
 import com.netcracker.education.crudlib.database.Database;
@@ -22,25 +17,23 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static com.netcracker.education.crudlib.utils.DatabaseUtils.getPath;
-
 /**
  *
  * @author Ya
  */
 /*Logger is correctly described for all methods in class. by ermolaxe*/
-public class DatabaseRepositoryImpl implements DatabaseRepository {
+public final class DatabaseRepositoryImpl implements DatabaseRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseRepositoryImpl.class.getName());
 
     //реализация паттерна Singleton
     private static DatabaseRepositoryImpl instance;
 
-    private final Map<String, Database> bases = new HashMap<>();
+    private Map<String, Database> bases = new HashMap<>();
 
     //-------Constructors and methods-------
-
     private DatabaseRepositoryImpl() {
+        bases = getExistBases();
     } //запрещаем создание объекта извне
 
     public static DatabaseRepositoryImpl getInstance() {
@@ -126,7 +119,6 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 
         /*есть мнение, что логирование об этой операции (а метод нужен нам для того, чтобы Макс
         спокойно мог добавить табличку в базу и поменять объект в bases), я добавлю на уровне работы с таблицами*/
-
         return true;
     }
 
@@ -173,10 +165,10 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 
         Database database = bases.get(dbName);
 
-        if(database.equals(null)){
+        if (database.equals(null)) {
             StringBuilder msg = new StringBuilder();
             msg.append("Method get from bases map return null for request with name [").append(dbName).append("].");
-            LOGGER.error(msg.toString(), Level.ERROR );
+            LOGGER.error(msg.toString(), Level.ERROR);
         }
 
         StringBuilder msg = new StringBuilder();
@@ -200,30 +192,32 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
     }
 
     //получаем базы при новом запуске
-    public Map<String, Database> getExistBases() {
+    private static Map<String, Database> getExistBases() {
 
-        Map<String, Database> bases = new HashMap<>();
+        Map<String, Database> databases = new HashMap<>();
         File dbRoot = new File(DatabaseUtils.getPath());
-        File[] dbNames = dbRoot.listFiles();
+        File[] dbFolders = dbRoot.listFiles();
 
-        for (int i = 0; i < dbNames.length; i++) {
-
-            Database database = new Database(dbNames[i].getName());
-            database.setTables(getExistTables(database));
-            bases.put(database.getName(), database);
+        for (File dbFolder : dbFolders) {
+            Database database = new Database(dbFolder.getName());
+            Map<String, Table> curDatabaseTables = getExistTables(database);
+            database.setTables(curDatabaseTables);
+            databases.put(database.getName(), database);
         }
 
-        return bases;
+        return databases;
     }
 
     private static Map<String, Table> getExistTables(Database database) {
-
         Map<String, Table> tables = new HashMap();
-        File databaseStoreFile = new File(DatabaseUtils.getPath() + database.getName()+ '/' + database.getName() + "TableStore.txt");
+        File databaseStoreFile = new File(DatabaseUtils.getPath()
+                + database.getName() + '/' + database.getName() + "TableStore.txt");
 
         ArrayList<Table> tablesList = (ArrayList<Table>) TableUtils.readTablesFromStorage(database);
 
-        // push to map
+        for (Table table : tablesList) {
+            tables.put(table.getName(), table);
+        }
 
         return tables;
     }

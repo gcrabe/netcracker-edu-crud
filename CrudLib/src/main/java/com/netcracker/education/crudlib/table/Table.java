@@ -1,18 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.netcracker.education.crudlib.table;
 
 import com.netcracker.education.crudlib.utils.DatabaseUtils;
 
-import com.netcracker.education.crudlib.utils.TableUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 

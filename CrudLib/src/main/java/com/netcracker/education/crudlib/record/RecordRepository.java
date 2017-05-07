@@ -11,13 +11,13 @@ import java.util.Map;
 public interface RecordRepository {
 
     public boolean create(String dbName, String tableName, Map<String, String> fields);
-    
+
     public boolean delete(String dbName, String tableName, Map<String, String> fields);
-    
-    public boolean update(String dbName, String tableName, Map<String, String> fields, 
+
+    public boolean update(String dbName, String tableName, Map<String, String> fields,
             String newKey, String newValue);
-    
+
     public List<Record> getAll(String dbName, String tableName);
-    
+
     public List<Record> getByFields(String dbName, String tableName, Map<String, String> fields);
 }
